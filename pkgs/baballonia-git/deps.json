@@ -150,6 +150,16 @@
     "hash": "sha256-/OGMl4NdeiI2YmukT5lIdvdlwkr2ebKilkpM9UkBZY4="
   },
   {
+    "pname": "AWSSDK.Core",
+    "version": "4.0.3.3",
+    "hash": "sha256-R0+MXSzeuC8BonHwnZTUiYy7/d2d4O+GutJIOScpJEY="
+  },
+  {
+    "pname": "AWSSDK.S3",
+    "version": "4.0.13.1",
+    "hash": "sha256-0Ba2CxExcpz7HA8wgejcPUsVAL+FLotFfC2nsjAqu34="
+  },
+  {
     "pname": "CommunityToolkit.Mvvm",
     "version": "8.4.0",
     "hash": "sha256-a0D550q+ffreU9Z+kQPdzJYPNaj1UjgyPofLzUg02ZI="
@@ -425,19 +435,9 @@
     "hash": "sha256-E1YTgb7dm4yu6A0Dxh1RATpsibD9RpapVMDx5RKrEAk="
   },
   {
-    "pname": "Microsoft.ML.OnnxRuntime",
-    "version": "1.22.0",
-    "hash": "sha256-1XHmOiMpuqy3E/RB5lrXUoTeNU224axDX+S+u7QXmGo="
-  },
-  {
     "pname": "Microsoft.ML.OnnxRuntime.Managed",
     "version": "1.18.1",
     "hash": "sha256-t195Laj/f/T9/WXAKDvdivxs1fLroAPTrhptHmBc56Q="
-  },
-  {
-    "pname": "Microsoft.ML.OnnxRuntime.Managed",
-    "version": "1.22.0",
-    "hash": "sha256-bzPDnOybLgaHJuRKRXnVL1uQGeW9aVdgkTzVK/L+Yf8="
   },
   {
     "pname": "Microsoft.ML.OnnxTransformer",
@@ -493,6 +493,11 @@
     "pname": "OscCore",
     "version": "1.0.5",
     "hash": "sha256-ZmRCfTjS6/hmGy5+jAIWhu8WTiL79TS5RjqovFm1nho="
+  },
+  {
+    "pname": "Project-Babble.Baballonia.OverlaySDK",
+    "version": "1.0.5-alpha",
+    "hash": "sha256-td8MDHzC9tjDiUH7lLEwaBq3NrhG0KcxHAAtqf7dHM8="
   },
   {
     "pname": "Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64",

@@ -18,6 +18,8 @@
   makeDesktopItem,
   fetchurl,
   stdenv,
+  onnxruntime,
+  pkgsCuda,
   cudaPackages,
   enableCuda ? config.cudaSupport,
 }:
@@ -85,12 +87,12 @@ buildDotnetModule (finalAttrs: rec {
   #   sha256 = "sha256-U9WY28FQjgtb7UXjrB2uGB0uP8b6igwxqVhzCQ/1JgY=";
   # };
 
-  # next fork:
+  # next-v2 fork:
   src = fetchFromGitHub {
     owner = "naraenda";
     repo = "Baballonia";
-    rev = "cf049e755168e3abe3aac621b676487088645cc4";
-    sha256 = "sha256-qOi5rSFGPwnXrvnvJGQrsl8nzUtaElhEfCRitH/yqnY=";
+    rev = "0cc8b6d9863919859828277183ea196fac6fd963";
+    sha256 = "sha256-pY2ID8AOeaYptvnKuWM/YjFYgiuyWzc6U88+GRRhLcE=";
     fetchSubmodules = true;
   };
 
@@ -113,19 +115,26 @@ buildDotnetModule (finalAttrs: rec {
     libusb1
     libuvc
     opencvsharp
+  ] ++ lib.optionals (!enableCuda) [
+    onnxruntime
+  ] ++ lib.optionals enableCuda [
+    pkgsCuda.onnxruntime
   ];
 
   postUnpack = ''
     ln -s ${internal} $sourceRoot/src/Baballonia.Desktop/_internal.zip
   '';
 
+  buildType = "publish";
+
   postFixup = ''
     # Expose entrypoint as 'baballonia'.
     wrapDotnetProgram $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia
 
     # Move modules to the actual module folder.
-    mkdir -p $out/lib/baballonia/Modules
-    mv $out/lib/baballonia/Baballonia.{VFTCapture,OpenCVCapture,IPCameraCapture,SerialCameraCapture,LibuvcCapture}.{dll,pdb} $out/lib/baballonia/Modules/
+    # Used on older commits.
+    # mkdir -p $out/lib/baballonia/Modules
+    # mv $out/lib/baballonia/Baballonia.{VFTCapture,OpenCVCapture,IPCameraCapture,SerialCameraCapture,LibuvcCapture}.{dll,pdb} $out/lib/baballonia/Modules/
   '';
 
   desktopItems = [
