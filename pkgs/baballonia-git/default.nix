@@ -1,33 +1,44 @@
 {
-  config,
-  cmake,
-  opencv,
-  udev,
-  libusb1,
-  libuvc,
-  libjpeg,
-  libGL,
-  fontconfig,
-  xorg,
-  lib,
   buildDotnetModule,
+  cmake,
+  config,
+  copyDesktopItems,
+  cudaPackages,
   dotnetCorePackages,
+  enableCuda ? config.cudaSupport,
   fetchFromGitHub,
   fetchFromGitLab,
-  copyDesktopItems,
-  makeDesktopItem,
   fetchurl,
-  stdenv,
+  fontconfig,
+  lib,
+  libGL,
+  libjpeg,
+  libusb1,
+  libuvc,
+  libxcb,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  makeDesktopItem,
   onnxruntime,
+  opencv,
   pkgsCuda,
-  cudaPackages,
-  enableCuda ? config.cudaSupport,
+  stdenv,
+  udev,
+  unzip,
+  xorg,
 }:
 let
-  internal = fetchurl {
-    # This URL is weird but this is the primary source
-    url = "http://217.154.52.44:7771/builds/trainer/1.0.0.0.zip";
-    hash = "sha256-Amlf6OIJyiU0vdMoXAzxXPnlX4TE9hQrjDMzbkMOzDE=";
+  trainer = fetchurl {
+    url = "https://github.com/Project-Babble/BabbleTrainer/releases/download/1.3.5/BabbleTrainer-x64";
+    hash = "sha256-Rxkt8OjEzlpGrmfBLJ5P3FaQHm9D8WUuje+J/x+M5sY=";
+    executable = true;
+  };
+
+  calibration = fetchurl {
+    url = "https://github.com/Project-Babble/BabbleCalibration/releases/download/1.0.5/Linux.zip";
+    hash = "sha256-L5ssy6nLvwzpWeSMvVMZoWnmCY9uK/5LVckJmf3hGdo=";
+    executable = true;
   };
 
   dotnet = dotnetCorePackages.dotnet_8;
@@ -73,6 +84,7 @@ buildDotnetModule (finalAttrs: rec {
     opencv
     opencvsharp
     udev
+    unzip
     xorg.libICE
     xorg.libSM
     xorg.libX11
@@ -110,11 +122,15 @@ buildDotnetModule (finalAttrs: rec {
   dotnetRuntime = dotnet.runtime;
   projectFile = "src/Baballonia.Desktop/Baballonia.Desktop.csproj";
 
-  runtimeDeps = [ 
-    udev
+  runtimeDeps = [
     libusb1
     libuvc
+    libxcb
+    libxcursor
+    libxi
+    libxkbcommon
     opencvsharp
+    udev
   ] ++ lib.optionals (!enableCuda) [
     onnxruntime
   ] ++ lib.optionals enableCuda [
@@ -122,7 +138,8 @@ buildDotnetModule (finalAttrs: rec {
   ];
 
   postUnpack = ''
-    ln -s ${internal} $sourceRoot/src/Baballonia.Desktop/_internal.zip
+    ln -s ${trainer}        $sourceRoot/src/Baballonia.Desktop/Calibration/Linux/Trainer/BabbleTrainer
+    unzip ${calibration} -d $sourceRoot/src/Baballonia.Desktop/Calibration/Linux/Overlay
   '';
 
   buildType = "publish";
