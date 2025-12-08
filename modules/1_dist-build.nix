@@ -1,12 +1,13 @@
 {
-  inputs,
   lib,
   config,
-  pkgs,
   ...
-}: let
+}:
+let
   cfg = config.modules.dist-build;
-in with lib; {
+in
+with lib;
+{
   options.modules.dist-build = {
     enable = mkEnableOption "Become fast";
   };
@@ -18,11 +19,18 @@ in with lib; {
         hostName = "fafnir";
         sshUser = "nixremote";
 
-        systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+        systems = [
+          "x86_64-linux"
+          "i686-linux"
+          "aarch64-linux"
+        ];
         protocol = "ssh-ng";
         maxJobs = 64;
         speedFactor = 32;
-        supportedFeatures = [ "nixos-test" "big-parallel" ];
+        supportedFeatures = [
+          "nixos-test"
+          "big-parallel"
+        ];
         mandatoryFeatures = [ "big-parallel" ];
       }
     ];

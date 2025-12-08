@@ -1,53 +1,91 @@
-{ inputs, lib, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+let
+  cfg = config;
+in
 {
   imports = [
     inputs.steam-config-nix.homeModules.default
   ];
 
   home = {
-    # TODO: check if we can toggle these based
-    # on enabled/disabled modules.
-    packages = with pkgs; [
-      # Tools      #
-      obsidian     # Note taking
-      qalculate-qt # Calculator
-      # Dev        #
-      vscode-fhs   # Microcrap
-      meld         # Diff tool w/regex support
-      # Web        #
-      firefox      # There's no good browser
-      # Music      #
-      kew          # TUI music player
-      spotify      # Spotify (not cool)
-      # Social     #
-      gajim        # XMPP
-      vesktop      # Discord
-      # Games      #
-      (starsector.overrideAttrs ({ ... }: {
-        postInstall = ''
-          cp ${../../dotfiles/starsector/settings.json} $out/share/starsector/data/config/settings.json
-        ''; # postInstall
-        } # overrideAttrs
-      )) # starsector
+    packages = builtins.concatLists [
+      (with pkgs; [
+        ripgrep
+      ])
+      # Desktop
+      (lib.optionals cfg.modules.games.enable (
+        with pkgs;
+        [
+          # Tools
+          obsidian
+          qalculate-qt
+          # Game-dev
+          blender
+          alcom # VRChat package manager
+          unityhub
+          # Dev
+          meld # Diff tool
+          # Web
+          firefox
+          # Music
+          kew # TUI music player
+          spotify
+          # Social
+          gajim # XMPP
+          vesktop # Discord
+        ]
+      )) # cfg.modules.games.enable
+      # Games
+      (lib.optionals cfg.modules.games.enable (
+        with pkgs;
+        [
+          (starsector.overrideAttrs {
+            postInstall = ''
+              cp ${../../dotfiles/starsector/settings.json} $out/share/starsector/data/config/settings.json
+            ''; # postInstall
+          } # overrideAttrs
+          ) # starsector
+        ]
+      )) # cfg.modules.games.enable
+
     ]; # packages
 
     stateVersion = "25.05";
   }; # home
 
   programs.vscode = {
-    package = pkgs.vscode.fhsWithPackages (ps:
-      with ps; [
+    enable = true;
+
+    package = pkgs.vscode.fhsWithPackages (
+      pkgs: with pkgs; [
         # nix specific
-        nixfmt
-        nixd
         direnv
+        nixd
+        nixfmt
+        nixfmt-tree
         # misc.
-        rustup
-        zlib
         openssl.dev
         pkg-config
+        zlib
       ]
     ); # package
+
+    extensions = with pkgs.vscode-extensions; [
+      # dev
+      ms-vscode-remote.vscode-remote-extensionpack
+      ms-vsliveshare.vsliveshare
+      # nix
+      jnoortheen.nix-ide
+      # c++
+      ms-vscode.cpptools-extension-pack
+      llvm-vs-code-extensions.vscode-clangd
+    ]; # extensions
   }; # programs.vscode
 
   programs.steam.config = {

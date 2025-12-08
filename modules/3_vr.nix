@@ -4,9 +4,12 @@
   config,
   inputs,
   ...
-}: let
+}:
+let
   cfg = config.modules.vr;
-in with lib; {
+in
+with lib;
+{
   imports = [
     inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
   ];
@@ -20,9 +23,9 @@ in with lib; {
     boot.kernelParams = [ "nvidia-modeset.conceal_vrr_caps=1" ];
 
     environment.systemPackages = with pkgs; [
-      steamcmd       # Required for lighthouse calibration.
-      xrizer-git     # SteamVR to OpenXR translation.
-      wlx-overlay-s  # Overlay & playspace mover.
+      steamcmd # Required for lighthouse calibration.
+      xrizer-git # SteamVR to OpenXR translation.
+      wlx-overlay-s # Overlay & playspace mover.
       vrcft-avalonia # Facial data proxy.
       baballonia-git # Eye & face tracking.
     ];
@@ -41,19 +44,19 @@ in with lib; {
       STEAMVR_LH_ENABLE = "1";
       # Set VR display mode.
       # For Bigscreen Beyond use 0 (72Hz) or 1 (90Hz).
-      XRT_COMPOSITOR_DESIRED_MODE="0";
+      XRT_COMPOSITOR_DESIRED_MODE = "0";
       # Enable async reprojection (i think).
       XRT_COMPOSITOR_COMPUTE = "1";
       # Fix tracking latency, no clue how lol:
-      XRT_COMPOSITOR_USE_PRESENT_WAIT="1";
+      XRT_COMPOSITOR_USE_PRESENT_WAIT = "1";
       # Allow larger overhead of compositor timewarp
       # Set this to maximum of 900/REFRESH_RATE
       # E.g. 72Hz: 12, 90Hz: 10
-      U_PACING_COMP_MIN_TIME_MS="12";
-      U_PACING_COMP_TIME_FRACTION_PERCENT="90";
+      U_PACING_COMP_MIN_TIME_MS = "12";
+      U_PACING_COMP_TIME_FRACTION_PERCENT = "90";
       # Allow floating FPS
-      U_PACING_COMP_MIN_FRAME_PERIOD="1";
-      U_PACING_APP_IMMEDIATE_WAIT_FRAME_RETURN="0";
+      U_PACING_COMP_MIN_FRAME_PERIOD = "1";
+      U_PACING_APP_IMMEDIATE_WAIT_FRAME_RETURN = "0";
     };
 
     # Bigscreen Beyond & Vive Face tracker.

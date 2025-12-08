@@ -1,16 +1,18 @@
 {
   lib,
-  pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.modules.desktop;
-in with lib; {
+in
+with lib;
+{
   options.modules.desktop = {
     enable = mkEnableOption "Wayland desktop";
   };
 
-  config = mkIf cfg.enable{
+  config = mkIf cfg.enable {
     services.displayManager = {
       sddm = {
         enable = true;

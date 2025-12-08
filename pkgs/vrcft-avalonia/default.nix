@@ -1,8 +1,9 @@
-{ 
-  appimageTools, 
+{
+  appimageTools,
   fetchurl,
   makeDesktopItem,
-}: let
+}:
+let
   # I would build this from source, but something is
   # terribly wrong with how they configured nuget.
   # It's a pain to fix that so isntead we're just
@@ -11,7 +12,7 @@
   pname = "vrcft-avalonia";
   version = "1.1.1.0";
   src = fetchurl {
-    url  = "https://github.com/dfgHiatus/VRCFaceTracking.Avalonia/releases/download/v${version}/VRCFaceTracking.Avalonia.${version}.AppImage";
+    url = "https://github.com/dfgHiatus/VRCFaceTracking.Avalonia/releases/download/v${version}/VRCFaceTracking.Avalonia.${version}.AppImage";
     hash = "sha256-oW8tsrJfC8woL2rCVyItFk4oR8M1SlQ/Y0vA1EaOhGQ=";
   }; # src
   desktopItem = makeDesktopItem {
@@ -21,11 +22,12 @@
     terminal = false;
     categories = [ "Game" ];
   }; # desktopItem
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: [ 
-    pkgs.icu 
+  extraPkgs = pkgs: [
+    pkgs.icu
   ]; # extraPkgs
 
   extraInstallCommands = ''

@@ -3,15 +3,19 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.modules.nvidia;
-in with lib; {
+in
+with lib;
+{
   options.modules.nvidia = {
     enable = mkEnableOption "Nvidia hardware support";
     cuda = mkEnableOption "CUDA support";
   };
-  config = mkIf cfg.enable ( mkMerge [
-    { # drivers
+  config = mkIf cfg.enable (mkMerge [
+    {
+      # drivers
       services.xserver.videoDrivers = [
         "nvidia"
       ];
@@ -42,8 +46,7 @@ in with lib; {
         }; # package
       }; # hardware.nvidia
     } # drivers
-    (mkIf cfg.cuda{
-      
+    (mkIf cfg.cuda {
 
       # Configure nixpkgs.
       #

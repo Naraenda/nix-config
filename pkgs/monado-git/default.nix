@@ -61,18 +61,19 @@
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
   serviceSupport ? true,
   tracingSupport ? false,
-  opencvSupport  ? false, # Set to true if you need this?
-} : stdenv.mkDerivation (finalAttrs: {
+  opencvSupport ? false, # Set to true if you need this?
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "26.0.0-alpha"; # Based on previous tag: 25.0.0
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner  = "monado";
-    repo   = "monado";
+    owner = "monado";
+    repo = "monado";
     # Cutting edge has from:
     # https://gitlab.freedesktop.org/monado/monado/-/commits/main
-    rev  = "8fbc390762c11f994ee8b36c2dd90a8bfcfe2476";
+    rev = "8fbc390762c11f994ee8b36c2dd90a8bfcfe2476";
     hash = "sha256-CDHNgVKyBCm8yDwv8cxF4JsyP3fb5U3jPR6COS25YrE=";
   };
 
@@ -132,7 +133,8 @@
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
     cudaPackages.cuda_cudart
-  ] ++ lib.optionals opencvSupport [
+  ]
+  ++ lib.optionals opencvSupport [
     opencv4
   ];
 
@@ -141,7 +143,7 @@
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_OPENCV" opencvSupport) 
+    (lib.cmakeBool "XRT_HAVE_OPENCV" opencvSupport)
   ];
 
   # Help openxr-loader find this runtime
@@ -156,10 +158,10 @@
 
   meta = {
     description = "Open source XR runtime";
-    homepage    = "https://monado.freedesktop.org/";
-    license     = lib.licenses.boost;
+    homepage = "https://monado.freedesktop.org/";
+    license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms   = lib.platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
   };
 })

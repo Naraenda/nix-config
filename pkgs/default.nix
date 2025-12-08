@@ -1,6 +1,8 @@
-{ 
+{
   pkgs,
-} : rec {
+  ...
+}:
+{
   # Get bleeding edge git builds :3
 
   # Special fork of xrizer that has support for generic
@@ -10,7 +12,7 @@
 
   # Just building latest monado:
   #   https://gitlab.freedesktop.org/monado/monado/
-  monado-git = pkgs.callPackage ./monado-git { 
+  monado-git = pkgs.callPackage ./monado-git {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
     gstreamer = pkgs.gst_all_1.gstreamer;
   };

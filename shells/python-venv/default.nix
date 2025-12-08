@@ -1,7 +1,8 @@
 {
   pkgs,
   ...
-}: pkgs.mkShell {
+}:
+pkgs.mkShell {
   buildInputs = with pkgs.python3Packages; [
     python
     venvShellHook

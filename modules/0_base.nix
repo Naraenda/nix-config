@@ -1,9 +1,10 @@
 {
   lib,
   pkgs,
-  config,
   ...
-}: with lib; {
+}:
+with lib;
+{
   # TODO: add option to swap between different kernel packages.
   # TODO: add option to mix-in patches.
 

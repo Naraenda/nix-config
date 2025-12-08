@@ -7,7 +7,6 @@
   dotnetCorePackages,
   enableCuda ? config.cudaSupport,
   fetchFromGitHub,
-  fetchFromGitLab,
   fetchurl,
   fontconfig,
   lib,
@@ -53,13 +52,14 @@ let
       tag = version;
       hash = "sha256-CkG4Kx/AkZqyhtclMfS51a9a9R+hsqBRlM4fry32YJ0=";
     };
-    buildInputs = [ 
-      opencv 
-    ]  ++ lib.optionals enableCuda [
+    buildInputs = [
+      opencv
+    ]
+    ++ lib.optionals enableCuda [
       cudaPackages.cuda_cudart
       cudaPackages.cuda_nvcc
     ];
-    nativeBuildInputs = [ 
+    nativeBuildInputs = [
       cmake
     ];
     sourceRoot = "${src.name}/src";
@@ -67,7 +67,7 @@ let
     cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
   };
 in
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   version = "0.0.0";
   pname = "baballonia";
 
@@ -131,9 +131,11 @@ buildDotnetModule (finalAttrs: rec {
     libxkbcommon
     opencvsharp
     udev
-  ] ++ lib.optionals (!enableCuda) [
+  ]
+  ++ lib.optionals (!enableCuda) [
     onnxruntime
-  ] ++ lib.optionals enableCuda [
+  ]
+  ++ lib.optionals enableCuda [
     pkgsCuda.onnxruntime
   ];
 
