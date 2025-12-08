@@ -37,69 +37,62 @@
       lib = nixpkgs.lib;
       forAllSystems = lib.genAttrs (import systems);
 
-      overlays = [
-        (final: prev: import ./pkgs { pkgs = final; })
-      ]; # overlays
+      overlays = import ./overlays;
+      pkgsOverlay = (self: super: import ./pkgs { pkgs = super; }); # TODO: move overlay definition to pkgs/default.nix
+      allOverlays = overlays ++ [pkgsOverlay];
 
-      nixpkgsConfig = {
-        allowUnfree = true;
-        allowUnfreePredicate = (_: true);
-      }; # nixpkgsConfig
-
-      mkPkgs =
-        system:
-        import nixpkgs {
-          inherit system overlays;
-          nixpkgs.config = nixpkgsConfig;
-        }; # mkPkgs
+      mkNixpkgs = overlays: {
+        inherit overlays;
+        config = {
+          allowUnfree = true;
+          allowUnfreePredicate = (_: true);
+        };
+      };
+      mkPkgs = system: import nixpkgs ((mkNixpkgs [pkgsOverlay]) // { inherit system; });
+      packages = forAllSystems mkPkgs;
 
       mkShell = module: forAllSystems (system: import module { pkgs = mkPkgs system; }); # mkShell
 
       mkSystem =
-        host: base: config:
-        lib.nixosSystem (
-          lib.mkMerge [
-            base
-            {
-              modules = [
-                { nixpkgs = { inherit overlays; }; }
-                { nixpkgs.config = nixpkgsConfig; }
-                ./modules
-                ./hosts/${host}
-                config
-              ]; # modules
-              specialArgs.inputs = inputs;
-            }
-          ]
-        ); # mkSystem
+        host: config: overrides:
+        let
+          default = {
+            system = "x86_64-linux";
+          };
+          configured = {
+            modules = [
+              { nixpkgs = mkNixpkgs allOverlays; }
+              ./modules
+              ./hosts/${host}
+              config
+            ]; # modules
+            specialArgs.inputs = inputs;
+          };
+        in
+        lib.nixosSystem (default // configured // overrides); # mkSystem
     in
     {
-      packages = forAllSystems mkPkgs;
+      inherit overlays allOverlays pkgsOverlay packages;
 
       devShells = {
         python-venv = mkShell ./shells/python-venv;
       }; # devShells
 
       nixosConfigurations = {
-        bifrost =
-          mkSystem "bifrost"
-            {
-              system = "x86_64-linux";
-            }
-            {
-              modules = {
-                # Core
-                nvidia = {
-                  enable = true;
-                  cuda = true;
-                };
-                dist-build.enable = true;
-                desktop.enable = true;
-                # Extra
-                games.enable = true;
-                vr.enable = true;
-              }; # modules
-            }; # bifrost
+        bifrost = mkSystem "bifrost" {
+          modules = {
+            # Core
+            nvidia = {
+              enable = true;
+              cuda = true;
+            };
+            dist-build.enable = true;
+            desktop.enable = true;
+            # Extra
+            games.enable = true;
+            vr.enable = true;
+          }; # modules
+        } { }; # bifrost
       }; # nixosConfigurations
 
     }; # outputs

@@ -19,7 +19,7 @@ in
         ripgrep
       ])
       # Desktop
-      (lib.optionals cfg.modules.games.enable (
+      (lib.optionals cfg.modules.desktop.enable (
         with pkgs;
         [
           # Tools
@@ -45,12 +45,7 @@ in
       (lib.optionals cfg.modules.games.enable (
         with pkgs;
         [
-          (starsector.overrideAttrs {
-            postInstall = ''
-              cp ${../../dotfiles/starsector/settings.json} $out/share/starsector/data/config/settings.json
-            ''; # postInstall
-          } # overrideAttrs
-          ) # starsector
+          starsector
         ]
       )) # cfg.modules.games.enable
 
@@ -60,7 +55,7 @@ in
   }; # home
 
   programs.vscode = {
-    enable = true;
+    enable = cfg.modules.desktop.enable or false;
 
     package = pkgs.vscode.fhsWithPackages (
       pkgs: with pkgs; [
@@ -89,7 +84,7 @@ in
   }; # programs.vscode
 
   programs.steam.config = {
-    enable = true;
+    enable = cfg.modules.games.enable or false;
 
     # Close steam whenever rebuilding to ensure steam's env is up-to-date.
     closeSteam = true;

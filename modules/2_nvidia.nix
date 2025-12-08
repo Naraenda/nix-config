@@ -15,7 +15,6 @@ with lib;
   };
   config = mkIf cfg.enable (mkMerge [
     {
-      # drivers
       services.xserver.videoDrivers = [
         "nvidia"
       ];
@@ -47,7 +46,6 @@ with lib;
       }; # hardware.nvidia
     } # drivers
     (mkIf cfg.cuda {
-
       # Configure nixpkgs.
       #
       # Make sure that 'https://cache.nixos-cuda.org' is set
