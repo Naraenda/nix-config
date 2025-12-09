@@ -28,5 +28,7 @@ with lib;
     services.desktopManager = {
       plasma6.enable = true;
     }; # services.desktopManager
+
+    programs.xwayland.enable = true;
   };
 }

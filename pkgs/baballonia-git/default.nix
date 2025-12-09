@@ -16,6 +16,7 @@
   libuvc,
   libxcb,
   libxcursor,
+  libxext,
   libxi,
   libxkbcommon,
   makeDesktopItem,
@@ -29,8 +30,8 @@
 }:
 let
   trainer = fetchurl {
-    url = "https://github.com/Project-Babble/BabbleTrainer/releases/download/1.3.5/BabbleTrainer-x64";
-    hash = "sha256-Rxkt8OjEzlpGrmfBLJ5P3FaQHm9D8WUuje+J/x+M5sY=";
+    url = "https://github.com/Project-Babble/BabbleTrainer/releases/download/1.3.8/BabbleTrainer-x64";
+    hash = "sha256-mrL3x+4yykcta1TfYIL5TwzE+NwhD5r1PzXrpyptyAQ=";
     executable = true;
   };
 
@@ -71,8 +72,6 @@ buildDotnetModule (finalAttrs: {
   version = "0.0.0";
   pname = "baballonia";
 
-  patches = [ ./0001-disable-auto-updating.patch ];
-
   buildInputs = [
     cmake
     copyDesktopItems
@@ -90,21 +89,16 @@ buildDotnetModule (finalAttrs: {
     xorg.libX11
   ];
 
-  # bsb2e_linux fork:
-  # src = fetchFromGitLab {
-  #   owner = "0x8081";
-  #   repo = "baballonia";
-  #   rev = "709982be5297c7a7f121aea89d4042519ceed495";
-  #   fetchSubmodules = true;
-  #   sha256 = "sha256-U9WY28FQjgtb7UXjrB2uGB0uP8b6igwxqVhzCQ/1JgY=";
-  # };
-
-  # next-v2 fork:
+  # next-v3 fork
+  # - bsb2e camera through libuvc
+  # - vft fix
+  # - packaging fix for nix
+  # - no micros*ft onnxruntime
   src = fetchFromGitHub {
     owner = "naraenda";
     repo = "Baballonia";
-    rev = "0cc8b6d9863919859828277183ea196fac6fd963";
-    sha256 = "sha256-pY2ID8AOeaYptvnKuWM/YjFYgiuyWzc6U88+GRRhLcE=";
+    rev = "a8c813e267c26f51f1d62bf0c8ba687ef92c618b";
+    sha256 = "sha256-H5W+QsvccLOKzqqDIp7Xio5DZlUbRkT5HB4I66NBDhE=";
     fetchSubmodules = true;
   };
 
@@ -127,6 +121,7 @@ buildDotnetModule (finalAttrs: {
     libuvc
     libxcb
     libxcursor
+    libxext
     libxi
     libxkbcommon
     opencvsharp
@@ -147,13 +142,8 @@ buildDotnetModule (finalAttrs: {
   buildType = "publish";
 
   postFixup = ''
-    # Expose entrypoint as 'baballonia'.
+    # Re-export as 'baballonia'.
     wrapDotnetProgram $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia
-
-    # Move modules to the actual module folder.
-    # Used on older commits.
-    # mkdir -p $out/lib/baballonia/Modules
-    # mv $out/lib/baballonia/Baballonia.{VFTCapture,OpenCVCapture,IPCameraCapture,SerialCameraCapture,LibuvcCapture}.{dll,pdb} $out/lib/baballonia/Modules/
   '';
 
   desktopItems = [
