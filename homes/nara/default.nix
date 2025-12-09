@@ -16,7 +16,15 @@ in
   home = {
     packages = builtins.concatLists [
       (with pkgs; [
+        # Tools
+        busybox
+        lazygit
         ripgrep
+        rsync
+        less
+        # Commandline
+        fzf
+        grc
       ])
       # Desktop
       (lib.optionals cfg.modules.desktop.enable (
@@ -53,6 +61,44 @@ in
 
     stateVersion = "25.05";
   }; # home
+
+  programs.fish = {
+    enable = true;
+    plugins = [
+      {
+        name = "grc";
+        src = pkgs.fishPlugins.grc.src;
+      }
+      {
+        name = "done";
+        src = pkgs.fishPlugins.done.src;
+      }
+      {
+        name = "hydro";
+        src = pkgs.fishPlugins.done.src;
+      }
+    ];
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  programs.git = {
+    enable = true;
+    extraConfig = {
+      user.name = "Nara";
+      init.defaultBranch = "develop";
+      alias = {
+        au = "add -u";
+        fu = "! git au && git commit --amend --no-edit";
+        l = "log --graph --oneline --format=format:'  %C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'";
+        la = "git l -all";
+        p = "push";
+      };
+    };
+  };
 
   programs.vscode = {
     enable = cfg.modules.desktop.enable or false;
