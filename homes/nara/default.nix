@@ -33,10 +33,11 @@ in
           # Tools
           obsidian
           qalculate-qt
-          # Game-dev
+          # Art
           blender
           alcom # VRChat package manager
           unityhub
+          pinta
           # Dev
           meld # Diff tool
           # Web
