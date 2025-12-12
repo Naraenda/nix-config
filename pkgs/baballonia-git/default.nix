@@ -119,6 +119,7 @@ buildDotnetModule (finalAttrs: {
     libxkbcommon
     opencvsharp
     udev
+    libGL
   ]
   ++ lib.optionals (!enableCuda) [
     onnxruntime
@@ -140,14 +141,19 @@ buildDotnetModule (finalAttrs: {
     # Re-export as 'baballonia'.
     wrapDotnetProgram $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia
 
-    # Godot applications requires steam-run for whatever reason
+    # Godot applications requires steam-run for whatever reason.
+    # I'm too lazy to figure out what part of the FSH it needs.
     # https://nixos.wiki/wiki/Godot
 
     # Create a backup of the original
     mv ${calibTool} ${calibTool}-original
     # Wrap the original
     makeWrapper ${steam-run}/bin/steam-run \
-      ${calibTool} --add-flags ${calibTool}-original
+      ${calibTool} \
+      --add-flags ${calibTool}-original \
+      --add-flags --xr-mode \
+      --add-flags on \
+      --set XR_LOADER_DEBUG all
     # Overwrite the version in bin
     rm $out/bin/BabbleCalibration.x86_64
     ln -s ${calibTool} $out/bin/BabbleCalibration.x86_64

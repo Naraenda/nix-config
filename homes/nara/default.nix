@@ -179,4 +179,6 @@ in
       }
     ''; # text
   }; # xdg.configFile."openvr/openvrpaths.vrpath"
+
+  xdg.configFile."openxr/1/active_runtime.json".source = "${pkgs.monado-git}/share/openxr/1/openxr_monado.json";
 }
