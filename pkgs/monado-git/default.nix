@@ -62,6 +62,7 @@
   serviceSupport ? true,
   tracingSupport ? false,
   opencvSupport ? false, # Set to true if you need this?
+  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";

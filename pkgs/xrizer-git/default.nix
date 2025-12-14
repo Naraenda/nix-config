@@ -11,6 +11,7 @@
   vulkan-loader,
   stdenv,
   cmake,
+  ...
 }:
 rustPlatform.buildRustPackage {
   pname = "xrizer";

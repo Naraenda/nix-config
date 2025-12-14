@@ -2,6 +2,7 @@
   appimageTools,
   fetchurl,
   makeDesktopItem,
+  ...
 }:
 let
   # I would build this from source, but something is

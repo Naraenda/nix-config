@@ -38,7 +38,7 @@
       forAllSystems = lib.genAttrs (import systems);
 
       overlays = import ./overlays;
-      pkgsOverlay = (self: super: import ./pkgs { pkgs = super; }); # TODO: move overlay definition to pkgs/default.nix
+      pkgsOverlay = (self: super: import ./pkgs { pkgs = super; config = super.config; }); # TODO: move overlay definition to pkgs/default.nix
       allOverlays = overlays ++ [pkgsOverlay];
 
       mkNixpkgs = overlays: {
