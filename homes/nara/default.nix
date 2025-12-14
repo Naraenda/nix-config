@@ -17,11 +17,16 @@ in
     packages = builtins.concatLists [
       (with pkgs; [
         # Tools
-        busybox
         lazygit
         ripgrep
         rsync
         less
+        # System debugging
+        usbutils
+        pciutils
+        lsof
+        traceroute
+        whois
         # Commandline
         fzf
         grc
