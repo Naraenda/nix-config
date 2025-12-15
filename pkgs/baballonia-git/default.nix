@@ -129,7 +129,7 @@ pkgs.buildDotnetModule (finalAttrs: {
       rm $out/bin/*
 
       # Ensure BabbleTrainer knows where to put temporary files (NEW!!!)
-      wrapProgram $out/lib/baballonia/Baballonia.Desktop \
+      wrapDotnetProgram $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia \
         --set BABBLE_TRAINER_TMP_DIR /tmp
 
       # Godot applications requires steam-run for whatever reason.
@@ -147,7 +147,6 @@ pkgs.buildDotnetModule (finalAttrs: {
         --set XR_LOADER_DEBUG all
 
       # Actually export our binaries.
-      ln $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia
       ln -s ${calibTool} $out/bin/babble-calibration
       ln -s ${babbleTrainer}/bin/babble-trainer $out/bin/babble-trainer
     '';
