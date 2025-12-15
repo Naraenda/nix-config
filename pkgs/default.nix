@@ -1,8 +1,15 @@
 {
   pkgs,
   config,
-  # TODO: fix this uggly hack
-  enableCuda ? config.cudaSupport ? config.nixpkgs.config.cudaSupport,
+  enableCuda ? (
+    # Is it clear that I have no clue what I'm doing. :3
+    if config ? cudaSupport then
+      config.cudaSupport
+    else if config.nixpkgs.config ? cudaSupport then
+      config.nixpkgs.config.cudaSupport
+    else
+      false
+  ),
   ...
 }: let 
   mkPackage = deriv: extraPkgs: pkgs.callPackage deriv ({ inherit config enableCuda; } // extraPkgs);

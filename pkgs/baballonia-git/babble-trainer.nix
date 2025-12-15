@@ -55,12 +55,19 @@ let
   ]);
 in
 pyPkgs.buildPythonPackage {
+  # TODO: figure out how this works on ROCm...
+  # * It should just be the same package because of HIP.
+  # * Need to verify and test.
+
   pname = "babble-trainer";
   version = "0.0.0";
   pyproject = false;
   doCheck = false;
 
   # https://github.com/Naraenda/BabbleTrainer/commits/various-fixes/
+  #
+  # TODO: move this over to main once this gets merged:
+  #   https://github.com/Project-Babble/BabbleTrainer/pull/4
   src = pkgs.fetchFromGitHub {
     owner = "Naraenda";
     repo = "BabbleTrainer";
@@ -77,9 +84,9 @@ pyPkgs.buildPythonPackage {
   # to redirect from /bin to /lib to not pollute /bin!
   buildPhase = ''
     mkdir -p $out/bin
-    echo "#!${pythonEnv}/bin/python3" > $out/bin/BabbleTrainer
-    cat trainermin.py >> $out/bin/BabbleTrainer
-    chmod +x $out/bin/BabbleTrainer
+    echo "#!${pythonEnv}/bin/python3" > $out/bin/babble-trainer
+    cat trainermin.py >> $out/bin/babble-trainer
+    chmod +x $out/bin/babble-trainer
   '';
 
   installPhase = ''

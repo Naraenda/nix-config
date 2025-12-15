@@ -15,9 +15,9 @@ let
     executable = true;
   };
 
-  dotnet = pkgs.dotnetCorePackages.dotnet_8;
-
   opencvsharp = pkgs.stdenv.mkDerivation rec {
+    # TODO: figure out how this works on ROCm...
+
     pname = "opencvsharp";
     version = "4.11.0.20250507";
 
@@ -27,6 +27,7 @@ let
       tag = version;
       hash = "sha256-CkG4Kx/AkZqyhtclMfS51a9a9R+hsqBRlM4fry32YJ0=";
     };
+    sourceRoot = "${src.name}/src";
 
     buildInputs = [
       pkgs.opencv
@@ -39,18 +40,39 @@ let
       pkgs.cmake
     ];
 
-    sourceRoot = "${src.name}/src";
-
     cmakeFlags = [
       (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+    ]
+    ++ lib.optionals enableCuda [
       "-DCUDAToolkit_ROOT=${pkgs.cudaPackages.cudatoolkit}"
     ];
   };
-  inPureEvalMode = !builtins ? currentSystem;
 in
 pkgs.buildDotnetModule (finalAttrs: {
+  # TODO: figure out how this works on ROCm...
+  # * Probably a different onnxruntime?
+  # * Opencvsharp should just work, I think...
+  # * What about babble-trainer?
+
   version = "0.0.0";
   pname = "baballonia";
+
+  # https://github.com/Naraenda/Baballonia/tree/next-v3
+  # - bsb2e camera through libuvc
+  # - vft fix
+  # - packaging fix for nix
+  # - no micros*ft onnxruntime
+  src = pkgs.fetchFromGitHub {
+    owner = "naraenda";
+    repo = "Baballonia";
+    rev = "a8c813e267c26f51f1d62bf0c8ba687ef92c618b";
+    sha256 = "sha256-H5W+QsvccLOKzqqDIp7Xio5DZlUbRkT5HB4I66NBDhE=";
+    fetchSubmodules = true;
+  };
+  projectFile = "src/Baballonia.Desktop/Baballonia.Desktop.csproj";
+  nugetDeps = ./deps.json;
+  dotnetSdk = pkgs.dotnetCorePackages.dotnet_8.sdk;
+  dotnetRuntime = pkgs.dotnetCorePackages.dotnet_8.runtime;
 
   buildInputs = with pkgs; [
     cmake
@@ -68,28 +90,6 @@ pkgs.buildDotnetModule (finalAttrs: {
     xorg.libSM
     xorg.libX11
   ];
-
-  # https://github.com/Naraenda/Baballonia/tree/next-v3
-  # - bsb2e camera through libuvc
-  # - vft fix
-  # - packaging fix for nix
-  # - no micros*ft onnxruntime
-  src =
-    if inPureEvalMode then
-      pkgs.fetchFromGitHub {
-        owner = "naraenda";
-        repo = "Baballonia";
-        rev = "a8c813e267c26f51f1d62bf0c8ba687ef92c618b";
-        sha256 = "sha256-H5W+QsvccLOKzqqDIp7Xio5DZlUbRkT5HB4I66NBDhE=";
-        fetchSubmodules = true;
-      }
-    else
-      /home/nara/code/Baballonia;
-
-  dotnetSdk = dotnet.sdk;
-  nugetDeps = ./deps.json;
-  dotnetRuntime = dotnet.runtime;
-  projectFile = "src/Baballonia.Desktop/Baballonia.Desktop.csproj";
 
   runtimeDeps =
     with pkgs;
@@ -113,38 +113,43 @@ pkgs.buildDotnetModule (finalAttrs: {
     ];
 
   postUnpack = ''
-    ln -s ${babbleTrainer}/bin/BabbleTrainer $sourceRoot/src/Baballonia.Desktop/Calibration/Linux/Trainer/BabbleTrainer
-
     unzip ${calibZip} -d $sourceRoot/src/Baballonia.Desktop/Calibration/Linux/Overlay
+    ln -s ${babbleTrainer}/bin/babble-trainer $sourceRoot/src/Baballonia.Desktop/Calibration/Linux/Trainer/BabbleTrainer
   '';
-
-  buildType = "publish";
 
   postFixup =
     let
+      # The internal calibration tool. We need to wrap this so it launches properly.
       calibTool = "$out/lib/baballonia/Calibration/Linux/Overlay/BabbleCalibration.x86_64";
     in
     ''
-      # Re-export as 'baballonia'.
-      wrapDotnetProgram $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia
+      # Clear out bin folder, we'll link since some of these may need
+      # to be wrapped. We'll also want to rename them for consistency's
+      # sake.
+      rm $out/bin/*
+
+      # Ensure BabbleTrainer knows where to put temporary files (NEW!!!)
+      wrapProgram $out/lib/baballonia/Baballonia.Desktop \
+        --set BABBLE_TRAINER_TMP_DIR /tmp
 
       # Godot applications requires steam-run for whatever reason.
       # I'm too lazy to figure out what part of the FSH it needs.
       # https://nixos.wiki/wiki/Godot
-
-      # Create a backup of the original
+      #
+      # Create a backup of the original.
       mv ${calibTool} ${calibTool}-original
-      # Wrap the original
+      # And wrap it!
       makeWrapper ${pkgs.steam-run}/bin/steam-run \
         ${calibTool} \
         --add-flags ${calibTool}-original \
         --add-flags --xr-mode \
         --add-flags on \
-        --set XR_LOADER_DEBUG all \
-        --set BABBLE_TRAINER_TMP_DIR /tmp
-      # Overwrite the version in bin
-      rm $out/bin/BabbleCalibration.x86_64
-      ln -s ${calibTool} $out/bin/BabbleCalibration.x86_64
+        --set XR_LOADER_DEBUG all
+
+      # Actually export our binaries.
+      ln $out/lib/baballonia/Baballonia.Desktop $out/bin/baballonia
+      ln -s ${calibTool} $out/bin/babble-calibration
+      ln -s ${babbleTrainer}/bin/babble-trainer $out/bin/babble-trainer
     '';
 
   desktopItems = [
@@ -155,7 +160,7 @@ pkgs.buildDotnetModule (finalAttrs: {
       exec = "${finalAttrs.meta.mainProgram} %u";
       terminal = false;
       type = "Application";
-      icon = "baballonia";
+      icon = "baballonia"; # TODO: fetch icon
       categories = [ "Game" ];
     })
   ];
