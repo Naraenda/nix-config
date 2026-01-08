@@ -15,15 +15,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "xrizer";
-  version = "0.4-alpha"; # Based on previous tag: 0.3
+  version = "0.5-alpha"; # Based on previous tag: 0.3
 
   src = fetchFromGitHub {
     repo = "xrizer";
     owner = "ImSapphire";
-    rev = "363bf46ae0b1757e41a08d77bbf56631b8cfed4c";
-    hash = "sha256-LeYQP1GQigzJBKJuBlYTaYLqxJAhw8Uiguf83Gcdpto=";
+    # Cutting edge from https://github.com/ImSapphire/xrizer/tree/next
+    rev = "0046aae8bab66a6a7ad69d5dac481ea294e0a803";
+    hash = "sha256-NnNYzoekeZeNQVoy8phcnWkyORFvxizDVkWGArg316g=";
   }; # src
-  cargoHash = "sha256-tLPwiwKkEBdsRxXgdcTM9TLJeNRZV32W11qUbyCVdHw=";
+  cargoHash = "sha256-orfK5pwWv91hA7Ra3Kk+isFTR+qMHSZ0EYZTVbf0fO0=";
 
   nativeBuildInputs = [
     cmake

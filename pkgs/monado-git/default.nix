@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    # Cutting edge has from:
+    # Cutting edge from:
     # https://gitlab.freedesktop.org/monado/monado/-/commits/main
     rev = "b58d31acfcf6582d66b22a48f5d26dd0df02df54";
     hash = "sha256-aJVSoPjKlzxz9JiBjYPzk+NJ7uLThR/ZwXY25RTKVNg=";
