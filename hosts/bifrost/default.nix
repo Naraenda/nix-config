@@ -15,6 +15,10 @@
   networking.firewall.enable = false;
   time.timeZone = "Europe/Amsterdam";
 
+  powerManagement = {
+    cpuFreqGovernor = "performance";
+  };
+
   # Users (me).
   users.users.nara = {
     isNormalUser = true;
