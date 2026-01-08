@@ -52,7 +52,11 @@ in
           spotify
           # Social
           gajim # XMPP
-          vesktop # Discord
+          (discord.override {
+            withOpenASAR = true;
+            withEquicord = true;
+            enableAutoscroll = true;
+          })
         ]
       )) # cfg.modules.games.enable
       # Games
