@@ -51,7 +51,7 @@
       mkPkgs = system: import nixpkgs ((mkNixpkgs [pkgsOverlay]) // { inherit system; });
       packages = forAllSystems mkPkgs;
 
-      mkShell = module: forAllSystems (system: import module { pkgs = mkPkgs system; }); # mkShell
+      mkShell = module: forAllSystems (system: import module { pkgs = mkPkgs system; });
 
       mkSystem =
         host: config: overrides:
