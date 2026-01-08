@@ -66,7 +66,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
-  version = "26.0.0-alpha"; # Based on previous tag: 25.0.0
+  version = "25.2.0-alpha";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -74,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "monado";
     # Cutting edge has from:
     # https://gitlab.freedesktop.org/monado/monado/-/commits/main
-    rev = "8fbc390762c11f994ee8b36c2dd90a8bfcfe2476";
-    hash = "sha256-CDHNgVKyBCm8yDwv8cxF4JsyP3fb5U3jPR6COS25YrE=";
+    rev = "b58d31acfcf6582d66b22a48f5d26dd0df02df54";
+    hash = "sha256-aJVSoPjKlzxz9JiBjYPzk+NJ7uLThR/ZwXY25RTKVNg=";
   };
 
   nativeBuildInputs = [
