@@ -35,7 +35,7 @@
   nix-update-script,
   onnxruntime,
   opencv4,
-  openhmd,
+  # openhmd,
   openvr,
   orc,
   pcre2,
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    openhmd
+    # openhmd
     openvr
     orc
     pcre2

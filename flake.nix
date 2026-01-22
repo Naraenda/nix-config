@@ -25,6 +25,9 @@
       url = "github:nix-systems/default-linux";
       flake = false;
     };
+    nixpkgs-hytale = {
+      url = "github:karol-broda/nixpkgs/hytale-launcher-init";
+    };
   }; # inputs
 
   outputs =
@@ -93,6 +96,14 @@
             vr.enable = true;
           }; # modules
         } { }; # bifrost
+        fafnir = mkSystem "fafnir" {
+          modules = {
+            nvidia = {
+              enable = true;
+              cuda = true;
+            };
+          };
+        } { }; # fafnir
       }; # nixosConfigurations
 
     }; # outputs

@@ -22,6 +22,10 @@
     "usbhid"
     "usb_storage"
     "sd_mod"
+    "nvidia"
+    "nvidia_uvm"
+    "nvidia_drm"
+    "nvidia_modeset"
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];

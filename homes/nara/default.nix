@@ -7,6 +7,11 @@
 }:
 let
   cfg = config;
+
+  pkgsHytale = import inputs.nixpkgs-hytale {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
 in
 {
   imports = [
@@ -38,6 +43,7 @@ in
           # Tools
           obsidian
           qalculate-qt
+          obs-studio
           # Art
           blender
           alcom # VRChat package manager
@@ -47,16 +53,21 @@ in
           meld # Diff tool
           # Web
           firefox
+          chromium
+          fx-cast-bridge
           # Music
           kew # TUI music player
           spotify
           # Social
           gajim # XMPP
           (discord.override {
-            withOpenASAR = true;
+            # withOpenASAR = true; # broken ?
             withEquicord = true;
             enableAutoscroll = true;
           })
+          # 3D printing
+          prusa-slicer
+          # freecad-wayland # CUDA borked: https://github.com/NixOS/nixpkgs/issues/475536
         ]
       )) # cfg.modules.games.enable
       # Games
@@ -64,6 +75,8 @@ in
         with pkgs;
         [
           starsector
+          osu-lazer-bin
+          pkgsHytale.hytale-launcher
         ]
       )) # cfg.modules.games.enable
 
@@ -97,7 +110,7 @@ in
 
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       user.name = "Nara";
       init.defaultBranch = "develop";
       alias = {
@@ -191,6 +204,6 @@ in
 
   xdg.configFile."openxr/1/active_runtime.json" = {
     force = true;
-    source = "${pkgs.monado-git}/share/openxr/1/openxr_monado.json";
+    source = "${pkgs.monado}/share/openxr/1/openxr_monado.json";
   };
 }

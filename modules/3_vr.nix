@@ -25,7 +25,8 @@ with lib;
     environment.systemPackages = with pkgs; [
       steamcmd # Required for lighthouse calibration.
       xrizer-git # SteamVR to OpenXR translation.
-      wlx-overlay-s # Overlay & playspace mover.
+      # wlx-overlay-s # Overlay & playspace mover.
+      wayvr # Overlay & playspace mover.
       vrcft-avalonia # Facial data proxy.
       baballonia-git # Eye & face tracking.
     ];
@@ -33,9 +34,10 @@ with lib;
     # OpenXR runtime.
     services.monado = {
       enable = true;
-      package = pkgs.monado-git;
+      # package = pkgs.monado-git;
       defaultRuntime = true; # Register as default OpenXR runtime.
       forceDefaultRuntime = true; # Register as default OpenXR runtime.
+      highPriority = true;
     };
 
     # Monado configuration for nvidia + wired VR.
@@ -49,11 +51,9 @@ with lib;
       XRT_COMPOSITOR_COMPUTE = "1";
       # Fix tracking latency, no clue how lol:
       XRT_COMPOSITOR_USE_PRESENT_WAIT = "1";
+      # XRT_COMPOSITOR_FORCE_NVIDIA_DISPLAY="NVIDIA";
       # Allow larger overhead of compositor timewarp
-      # Set this to maximum of 900/REFRESH_RATE
-      # E.g. 72Hz: 12, 90Hz: 10
-      U_PACING_COMP_MIN_TIME_MS = "12";
-      U_PACING_COMP_TIME_FRACTION_PERCENT = "90";
+      U_PACING_COMP_TIME_FRACTION_PERCENT = "50"; # Used to be 90,
       # Allow floating FPS
       U_PACING_COMP_MIN_FRAME_PERIOD = "1";
       U_PACING_APP_IMMEDIATE_WAIT_FRAME_RETURN = "0";
@@ -64,13 +64,13 @@ with lib;
       # Bigscreen Beyond
       KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="35bd", ATTRS{idProduct}=="0101", MODE="0660", TAG+="uaccess", GROUP="video"
       # Bigscreen Bigeye
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="35bd", ATTRS{idProduct}=="0202", MODE="0660", TAG+="uaccess", GROUP="video", SYMLINK+="bigeye0"
+      SUBSYSTEMS=="usb", ATTRS{idVendor}=="35bd", ATTRS{idProduct}=="0202", MODE="0660", TAG+="uaccess", GROUP="video", SYMLINK+="video-bigeye0"
       # Bigscreen Beyond Audio Strap
       KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="35bd", ATTRS{idProduct}=="0105", MODE="0660", TAG+="uaccess", GROUP="video"
       # Bigscreen Beyond Firmware Mode?
       KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="35bd", ATTRS{idProduct}=="4004", MODE="0660", TAG+="uaccess", GROUP="video"
       # HTC Vive Face Tracker (not sure if required)
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="0321", MODE="0660", TAG+="uaccess", GROUP="video", SYMLINK+="htcft0"
+      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="0321", MODE="0660", TAG+="uaccess", GROUP="video", SYMLINK+="video-htcft0"
     ''; # services.udev.extraRules
   };
 }
