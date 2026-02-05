@@ -25,8 +25,11 @@
       url = "github:nix-systems/default-linux";
       flake = false;
     };
-    nixpkgs-hytale = {
-      url = "github:karol-broda/nixpkgs/hytale-launcher-init";
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+    };
+    zed-git = {
+      url = "github:zed-industries/zed";
     };
   }; # inputs
 
@@ -72,7 +75,11 @@
             specialArgs.inputs = inputs;
           };
         in
-        lib.nixosSystem (default // configured // overrides); # mkSystem
+        lib.nixosSystem (lib.attrsets.mergeAttrsList [
+          default
+          configured
+          overrides
+        ]); # mkSystem
     in
     {
       inherit overlays allOverlays pkgsOverlay packages;
@@ -95,13 +102,21 @@
             games.enable = true;
             vr.enable = true;
           }; # modules
-        } { }; # bifrost
+          nix.settings.system-features = [
+            "gccarch-znver5"
+          ];
+        } {
+          # set overrides
+          # uh oh this crashess?
+        }; # bifrost
         fafnir = mkSystem "fafnir" {
           modules = {
             nvidia = {
               enable = true;
               cuda = true;
             };
+            podman.enable = true;
+            remote.enable = true;
           };
         } { }; # fafnir
       }; # nixosConfigurations

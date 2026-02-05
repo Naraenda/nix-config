@@ -15,9 +15,33 @@
   networking.firewall.enable = false;
   time.timeZone = "Europe/Amsterdam";
 
+  boot.kernelParams = [ 
+    "amd_pstate=guided"
+    "preempt=full"
+    "threadirqs"
+  ];
+
+  boot.kernelPatches = [
+    {
+      name = "bsb-uvc-version-fix";
+      patch = ../../patches/kernel/bsb-uvc-version-fix.patch;
+    }
+  ];
+
   powerManagement = {
     cpuFreqGovernor = "performance";
   };
+
+  # Allow swapping scheduler.
+  services.scx = {
+    enable = true;
+    # Latency-Aware Virtual Deadline
+    scheduler = "scx_lavd";
+    extraArgs = [ "--performance" ];
+  };
+
+  # Allow real time priority thread scheduling.
+  security.rtkit.enable = true;
 
   # Users (me).
   users.users.nara = {
@@ -46,12 +70,16 @@
         "umask=0022"
         "nofail"
       ];
+      btrfsOptions = [
+        "nofail"
+        "compress=zstd"
+      ];
     in
     {
       "/mnt/axiom" = {
         device = "/dev/disk/by-label/Axiom";
-        fsType = "ntfs-3g";
-        options = ntfsOptions;
+        fsType = "btrfs";
+        options = btrfsOptions;
       };
       "/mnt/daedalus" = {
         device = "/dev/disk/by-label/Daedalus";

@@ -10,8 +10,8 @@ let
 
   # TODO: figure out how to build & run Godot OpenXR projects.
   calibZip = pkgs.fetchurl {
-    url = "https://github.com/Project-Babble/BabbleCalibration/releases/download/1.0.5/Linux.zip";
-    hash = "sha256-L5ssy6nLvwzpWeSMvVMZoWnmCY9uK/5LVckJmf3hGdo=";
+    url = "https://github.com/Project-Babble/BabbleCalibration/releases/download/1.0.6/Linux.zip";
+    hash = "sha256-ytKGg+qVZwHtZUWfJwesvodjIjhffortX6zPs7nWBpU=";
     executable = true;
   };
 
@@ -29,23 +29,17 @@ let
     };
     sourceRoot = "${src.name}/src";
 
-    buildInputs = [
-      pkgs.opencv
-    ]
-    ++ lib.optionals enableCuda [
-      pkgs.cudaPackages.cudatoolkit
+    patches = [
+      ./cvsharp-cv4-compat.patch
     ];
 
-    nativeBuildInputs = [
-      pkgs.cmake
-    ];
+    buildInputs = [ pkgs.opencv ] ++ lib.optionals enableCuda [ pkgs.cudaPackages.cudatoolkit ];
+
+    nativeBuildInputs = [ pkgs.cmake ];
 
     cmakeFlags = [
       (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
-    ]
-    ++ lib.optionals enableCuda [
-      "-DCUDAToolkit_ROOT=${pkgs.cudaPackages.cudatoolkit}"
-    ];
+    ] ++ lib.optionals enableCuda [ "-DCUDAToolkit_ROOT=${pkgs.cudaPackages.cudatoolkit}" ];
   };
 in
 pkgs.buildDotnetModule (finalAttrs: {
@@ -57,22 +51,25 @@ pkgs.buildDotnetModule (finalAttrs: {
   version = "0.0.0";
   pname = "baballonia";
 
-  # https://github.com/Naraenda/Baballonia/tree/next-v3
-  # - bsb2e camera through libuvc
-  # - vft fix
-  # - packaging fix for nix
-  # - no micros*ft onnxruntime
   src = pkgs.fetchFromGitHub {
-    owner = "naraenda";
+    owner = "Project-Babble";
     repo = "Baballonia";
-    rev = "a8c813e267c26f51f1d62bf0c8ba687ef92c618b";
-    sha256 = "sha256-H5W+QsvccLOKzqqDIp7Xio5DZlUbRkT5HB4I66NBDhE=";
+    rev = "v1.1.0.9HF5";
+    sha256 = "sha256-LOOg0paOpZsCVYBCO9w9ulykRlkpCeMtkR0u+HZCh4I=";
     fetchSubmodules = true;
   };
   projectFile = "src/Baballonia.Desktop/Baballonia.Desktop.csproj";
   nugetDeps = ./deps.json;
   dotnetSdk = pkgs.dotnetCorePackages.dotnet_8.sdk;
   dotnetRuntime = pkgs.dotnetCorePackages.dotnet_8.runtime;
+
+  patches = [
+    # Remove VCPKG dependancy on "Microsoft.ML.OnnxRuntime" in favor of using the native onnx runtime provided locally
+    (pkgs.fetchpatch {
+      url = "https://github.com/Project-Babble/Baballonia/commit/1c60dbffab7fa1689d8a441ff52bfd4b0cfecc0c.diff";
+      hash = "sha256-k4vTgKgKJg595502TPujEDZIIv6UhZjt23AzPd2IW0s=";
+    })
+  ];
 
   buildInputs = with pkgs; [
     cmake
@@ -104,13 +101,10 @@ pkgs.buildDotnetModule (finalAttrs: {
       opencvsharp
       udev
       libGL
+      libv4l
     ]
-    ++ lib.optionals (!enableCuda) [
-      onnxruntime
-    ]
-    ++ lib.optionals enableCuda [
-      pkgsCuda.onnxruntime
-    ];
+    ++ lib.optionals (!enableCuda) [ onnxruntime ]
+    ++ lib.optionals enableCuda [ pkgsCuda.onnxruntime ];
 
   postUnpack = ''
     unzip ${calibZip} -d $sourceRoot/src/Baballonia.Desktop/Calibration/Linux/Overlay
@@ -149,6 +143,14 @@ pkgs.buildDotnetModule (finalAttrs: {
       # Actually export our binaries.
       ln -s ${calibTool} $out/bin/babble-calibration
       ln -s ${babbleTrainer}/bin/babble-trainer $out/bin/babble-trainer
+
+      # Move dll files to Modules that it wants there instead
+      mkdir -p $out/lib/baballonia/Modules
+      mv $out/lib/baballonia/Baballonia.LibV4L2Capture.dll $out/lib/baballonia/Modules/
+      mv $out/lib/baballonia/Baballonia.SerialCameraCapture.dll $out/lib/baballonia/Modules/
+      mv $out/lib/baballonia/Baballonia.OpenCVCapture.dll $out/lib/baballonia/Modules/
+      mv $out/lib/baballonia/Baballonia.IPCameraCapture.dll $out/lib/baballonia/Modules/
+      mv $out/lib/baballonia/Baballonia.VFTCapture.dll $out/lib/baballonia/Modules/
     '';
 
   desktopItems = [
@@ -169,8 +171,6 @@ pkgs.buildDotnetModule (finalAttrs: {
     platforms = lib.platforms.linux;
     homepage = "https://github.com/Project-Babble/Baballonia";
     description = "Free and open source eye and face tracking for social VR";
-    maintainers = with lib.maintainers; [
-      naraenda
-    ];
+    maintainers = with lib.maintainers; [ naraenda ];
   };
 })

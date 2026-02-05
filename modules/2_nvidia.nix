@@ -58,7 +58,7 @@ with lib;
         cudaPackages.cudatoolkit
         cudaPackages.cuda_nvcc
         cudaPackages.cuda_cudart
-        cudaPackages.cudnn 
+        cudaPackages.cudnn
       ];
     }) # cuda
   ]); # config

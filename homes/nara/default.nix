@@ -7,11 +7,6 @@
 }:
 let
   cfg = config;
-
-  pkgsHytale = import inputs.nixpkgs-hytale {
-    system = pkgs.system;
-    config.allowUnfree = true;
-  };
 in
 {
   imports = [
@@ -51,10 +46,6 @@ in
           pinta
           # Dev
           meld # Diff tool
-          # Web
-          firefox
-          chromium
-          fx-cast-bridge
           # Music
           kew # TUI music player
           spotify
@@ -76,7 +67,6 @@ in
         [
           starsector
           osu-lazer-bin
-          pkgsHytale.hytale-launcher
         ]
       )) # cfg.modules.games.enable
 
@@ -123,6 +113,13 @@ in
     };
   };
 
+  programs.firefox = {
+    enable = true;
+  };
+  programs.chromium = {
+    enable =  true;
+  };
+
   programs.vscode = {
     enable = cfg.modules.desktop.enable or false;
 
@@ -152,6 +149,47 @@ in
     ]; # extensions
   }; # programs.vscode
 
+  programs.zed-editor = {
+    enable = true;
+    extensions = [ "nix" "toml" "rust" "neocmake" ];
+    userSettings = {
+      base_keymap = "VSCode";
+      disable_ai  = true;
+      vim_mode = false;
+      autosave = "on_focus_change";
+      relative_line_numbers = "enabled";
+
+      gutter = {
+        breakpoints = false;
+      };
+      sticky_scroll = {
+        enabled = true;
+      };
+      minimap = {
+        show = "always";
+        display_in = "all_editors";
+      };
+      colorize_brackets = true;
+      inlay_hints = {
+        show_background = true;
+        enabled = true;
+      };
+      indent_guides = {
+        coloring = "indent_aware";
+      };
+      vim = {
+        toggle_relative_line_numbers = true;
+        default_mode = "insert";
+      };
+      auto_signature_help = true;
+      show_signature_help_after_edits = true;
+      telemetry = {
+        diagnostics = false;
+        metrics = false;
+      };
+    }; # userSettings
+  };
+
   programs.steam.config = {
     enable = cfg.modules.games.enable or false;
 
@@ -161,7 +199,8 @@ in
     apps = {
       vrchat = {
         id = 438100;
-        # It's recommended to use custom RTSP version of Proton for VRChat.
+        # It's recommended to use custom RTSP version of Proton for VRChat
+        # if you want livestreams to work.
         # Just get the tarball here:
         #   https://github.com/SpookySkeletons/proton-ge-rtsp/releases
         # For installation instruction see:
@@ -169,11 +208,16 @@ in
         #
         # * rtsp18-1 is good known version.
         # * rtsp19 is broken. Do not use!
-        compatTool = "GE-Proton10-15-rtsp18-1";
+        # compatTool = "GE-Proton10-15-rtsp18-1";
+
+        compatTool = "proton_experimental";
         launchOptions = {
           env = {
             PRESSURE_VESSEL_FILESYSTEMS_RW = "$XDG_RUNTIME_DIR/monado_comp_ipc";
           }; # env
+          wrappers = [
+            (lib.getExe pkgs.gamemode)
+          ];
         }; # launchOptions
       }; # vrchat
     }; # apps

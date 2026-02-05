@@ -8,7 +8,7 @@ let
   nixFileFilter = name: name != "default.nix" && builtins.match ".*\\.nix" name != null;
 
   nixFiles = builtins.filter nixFileFilter (builtins.attrNames files);
-  imports = builtins.map (f: ./. + "/${f}") nixFiles;
+  imports = map (f: ./. + "/${f}") nixFiles;
 in
 {
   inherit imports;
