@@ -31,6 +31,9 @@
     zed-git = {
       url = "github:zed-industries/zed";
     };
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
+    };
   }; # inputs
 
   outputs =
@@ -45,7 +48,10 @@
 
       overlays = import ./overlays;
       pkgsOverlay = (self: super: import ./pkgs { pkgs = super; config = super.config; }); # TODO: move overlay definition to pkgs/default.nix
-      allOverlays = overlays ++ [pkgsOverlay];
+      allOverlays = overlays ++ [
+        pkgsOverlay
+        inputs.nix-cachyos-kernel.overlays.default
+      ];
 
       mkNixpkgs = overlays: {
         inherit overlays;

@@ -4,8 +4,26 @@
   config,
   pkgs,
   ...
-}:
-{
+}: let
+  kernel = pkgs.cachyosKernels.linux-cachyos-latest.override {
+    pname = "linux-cachyos-custom";
+
+    patches = [
+      ../../patches/kernel/bsb-uvc-version-fix.patch
+    ];
+
+    # Optimization settings
+    cpusched = "bore";
+    lto = "thin";
+    processorOpt = "zen4";
+    hzTicks = "1000";
+
+    extraMakeFlags = [
+      "NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING=1"
+      "KCFLAGS=-Wno-error"
+    ];
+  };
+in {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -15,30 +33,36 @@
   networking.firewall.enable = false;
   time.timeZone = "Europe/Amsterdam";
 
-  boot.kernelParams = [ 
-    "amd_pstate=guided"
-    "preempt=full"
-    "threadirqs"
-  ];
+  # boot.kernelParams = [
+  #   "amd_pstate=guided"
+  #   "preempt=full"
+  #   "threadirqs"
+  # ];
 
-  boot.kernelPatches = [
-    {
-      name = "bsb-uvc-version-fix";
-      patch = ../../patches/kernel/bsb-uvc-version-fix.patch;
-    }
-  ];
+  boot.kernelPackages = let
+    helpers = pkgs.callPackage "${inputs.nix-cachyos-kernel.outPath}/helpers.nix" {};
+  in helpers.kernelModuleLLVMOverride (pkgs.linuxKernel.packagesFor kernel);
 
-  powerManagement = {
-    cpuFreqGovernor = "performance";
-  };
+  # Not required with CachyOS-based kernel since we patch directly there!
+  # boot.kernelPatches = [
+  #   {
+  #     name = "bsb-uvc-version-fix";
+  #     patch = ../../patches/kernel/bsb-uvc-version-fix.patch;
+  #   }
+  # ];
 
   # Allow swapping scheduler.
-  services.scx = {
-    enable = true;
-    # Latency-Aware Virtual Deadline
-    scheduler = "scx_lavd";
-    extraArgs = [ "--performance" ];
-  };
+  # Not required with BORE or BMQ scheduler!
+  # services.scx = {
+  #   enable = true;
+  #   # Latency-Aware Virtual Deadline
+  #   scheduler = "scx_lavd";
+  #   extraArgs = [ "--performance" ];
+  # };
+
+  # powerManagement = {
+  #   cpuFreqGovernor = "performance";
+  # };
 
   # Allow real time priority thread scheduling.
   security.rtkit.enable = true;
