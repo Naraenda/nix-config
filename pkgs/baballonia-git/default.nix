@@ -56,6 +56,10 @@ pkgs.buildDotnetModule (finalAttrs: {
     repo = "Baballonia";
     rev = "v1.1.0.9HF5";
     sha256 = "sha256-LOOg0paOpZsCVYBCO9w9ulykRlkpCeMtkR0u+HZCh4I=";
+    # HF5 isn't compatible with rc1-rc15.
+    # You must regenerate the eye tracking model!
+    # rev = "v1.1.0.9rc15";
+    # sha256 = "sha256-tI9b4oj0/l98ZdzqDNft369Ij/hGNokyKMxjCNHWAR4=";
     fetchSubmodules = true;
   };
   projectFile = "src/Baballonia.Desktop/Baballonia.Desktop.csproj";

@@ -74,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "monado";
     # Cutting edge from:
     # https://gitlab.freedesktop.org/monado/monado/-/commits/main
-    rev = "b58d31acfcf6582d66b22a48f5d26dd0df02df54";
-    hash = "sha256-aJVSoPjKlzxz9JiBjYPzk+NJ7uLThR/ZwXY25RTKVNg=";
+    rev = "81b724724fea17edc0d21751f3b6f46d74bac4e8";
+    hash = "sha256-Hi9uIsvi5IGoDPHk1k/jHrsuTYlcrF/U1QT0QT+BEVY=";
   };
 
   nativeBuildInputs = [

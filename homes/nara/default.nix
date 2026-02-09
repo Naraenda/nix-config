@@ -215,9 +215,6 @@ in
           env = {
             PRESSURE_VESSEL_FILESYSTEMS_RW = "$XDG_RUNTIME_DIR/monado_comp_ipc";
           }; # env
-          wrappers = [
-            (lib.getExe pkgs.gamemode)
-          ];
         }; # launchOptions
       }; # vrchat
     }; # apps
@@ -248,6 +245,6 @@ in
 
   xdg.configFile."openxr/1/active_runtime.json" = {
     force = true;
-    source = "${pkgs.monado}/share/openxr/1/openxr_monado.json";
+    source = "${pkgs.monado-git}/share/openxr/1/openxr_monado.json";
   };
 }

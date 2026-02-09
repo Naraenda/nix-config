@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage {
     repo = "xrizer";
     owner = "ImSapphire";
     # Cutting edge from https://github.com/ImSapphire/xrizer/tree/next
-    rev = "0046aae8bab66a6a7ad69d5dac481ea294e0a803";
-    hash = "sha256-NnNYzoekeZeNQVoy8phcnWkyORFvxizDVkWGArg316g=";
+    rev = "c87d7c38fbc372980ca226802a524c1d6d85403e";
+    hash = "sha256-PEypy9lOcL8Nbc11YYgXNhkoBEyJVStVGs+tozcumeY=";
   }; # src
   cargoHash = "sha256-orfK5pwWv91hA7Ra3Kk+isFTR+qMHSZ0EYZTVbf0fO0=";
 

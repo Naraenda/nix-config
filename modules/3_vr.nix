@@ -34,7 +34,7 @@ with lib;
     # OpenXR runtime.
     services.monado = {
       enable = true;
-      # package = pkgs.monado-git;
+      package = pkgs.monado-git;
       defaultRuntime = true; # Register as default OpenXR runtime.
       forceDefaultRuntime = true; # Register as default OpenXR runtime.
       highPriority = true;
