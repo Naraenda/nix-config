@@ -13,6 +13,52 @@ in
     inputs.steam-config-nix.homeModules.default
   ];
 
+  fonts = {
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        emoji = [ "Twitter Color Emoji" ];
+      };
+    };
+  };
+  xdg.configFile."fontconfig/conf.d/99-emoji-fix.conf".text = ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <fontconfig>
+
+        <match target="pattern">
+            <test qual="any" name="family"><string>emoji</string></test>
+            <edit name="family" mode="assign" binding="same"><string>Noto Color Emoji</string></edit>
+        </match>
+
+        <match target="pattern">
+            <test name="family"><string>sans</string></test>
+            <edit name="family" mode="append"><string>Noto Color Emoji</string></edit>
+        </match>
+
+        <match target="pattern">
+            <test name="family"><string>sans-serif</string></test>
+            <edit name="family" mode="append"><string>Noto Color Emoji</string></edit>
+        </match>
+
+        <selectfont>
+            <rejectfont>
+                <pattern><patelt name="family"><string>DejaVu Sans</string></patelt></pattern>
+            </rejectfont>
+            <rejectfont>
+                <pattern><patelt name="family"><string>DejaVu Serif</string></patelt></pattern>
+            </rejectfont>
+            <rejectfont>
+                <pattern><patelt name="family"><string>DejaVu Sans Mono</string></patelt></pattern>
+            </rejectfont>
+            <rejectfont>
+                <pattern><patelt name="family"><string>Symbola</string></patelt></pattern>
+            </rejectfont>
+        </selectfont>
+
+    </fontconfig>
+  '';
+
   home = {
     packages = builtins.concatLists [
       (with pkgs; [
@@ -39,6 +85,7 @@ in
           obsidian
           qalculate-qt
           obs-studio
+          firefox-bin
           # Art
           blender
           alcom # VRChat package manager
@@ -46,6 +93,7 @@ in
           pinta
           # Dev
           meld # Diff tool
+          remmina
           # Music
           kew # TUI music player
           spotify
@@ -56,9 +104,13 @@ in
             withEquicord = true;
             enableAutoscroll = true;
           })
+          element-desktop
+          cinny
           # 3D printing
           prusa-slicer
-          # freecad-wayland # CUDA borked: https://github.com/NixOS/nixpkgs/issues/475536
+          openscad
+          # Fonts
+          twitter-color-emoji
         ]
       )) # cfg.modules.games.enable
       # Games
@@ -113,9 +165,6 @@ in
     };
   };
 
-  programs.firefox = {
-    enable = true;
-  };
   programs.chromium = {
     enable =  true;
   };

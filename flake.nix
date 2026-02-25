@@ -101,6 +101,7 @@
             nvidia = {
               enable = true;
               cuda = true;
+              bsbPatch = true;
             };
             dist-build.enable = true;
             desktop.enable = true;
@@ -121,7 +122,7 @@
               enable = true;
               cuda = true;
             };
-            podman.enable = true;
+            containers.enable = true;
             remote.enable = true;
           };
         } { }; # fafnir
