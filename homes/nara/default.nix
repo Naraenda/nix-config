@@ -59,6 +59,16 @@ in
     </fontconfig>
   '';
 
+
+  xdg.configFile."wireplumber/wireplumber.conf.d/50-disable-volume-control.conf".text = ''
+  access.rules = [
+    {
+      matches = [ { application.process.binary = "Discord" } ]
+      actions = { update-props = { default_permissions = "rx" } }
+    }
+  ]
+  '';
+
   home = {
     packages = builtins.concatLists [
       (with pkgs; [
@@ -67,12 +77,14 @@ in
         ripgrep
         rsync
         less
+        ffmpeg
         # System debugging
         usbutils
         pciutils
         lsof
         traceroute
         whois
+        ethtool
         # Commandline
         fzf
         grc
@@ -86,6 +98,7 @@ in
           qalculate-qt
           obs-studio
           firefox-bin
+          libreoffice
           # Art
           blender
           alcom # VRChat package manager
@@ -94,9 +107,12 @@ in
           # Dev
           meld # Diff tool
           remmina
-          # Music
+          # Media
           kew # TUI music player
           spotify
+          mpv
+          vlc
+          yt-dlp
           # Social
           gajim # XMPP
           (discord.override {
@@ -148,6 +164,17 @@ in
   programs.fzf = {
     enable = true;
     enableFishIntegration = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableFishIntegration = true;
+
+    config = {
+      global = {
+        hide_env_diff = true;
+      };
+    };
   };
 
   programs.git = {

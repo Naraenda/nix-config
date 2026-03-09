@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_HAVE_OPENCV" opencvSupport)
     # Monado does not compute view visibility masks correctly.
     # Fixed in https://gitlab.freedesktop.org/monado/monado/-/merge_requests/2758
-    (lib.cmakeBool "XRT_FEATURE_OPENXR_VISIBILITY_MASK" false)
+    # (lib.cmakeBool "XRT_FEATURE_OPENXR_VISIBILITY_MASK" false)
   ];
 
   # Help openxr-loader find this runtime

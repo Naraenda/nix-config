@@ -74,6 +74,7 @@ in {
       "wheel"
       "video"
       "render"
+      "ydotool"
     ];
   };
   home-manager.users.nara = import ../../homes/nara {
@@ -83,6 +84,12 @@ in {
       pkgs
       config
       ;
+  };
+
+
+  # enable the ydotool service
+  programs.ydotool = {
+    enable = true;
   };
 
   fileSystems =
@@ -130,6 +137,8 @@ in {
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
   };
 
   # Mount drives automagically.
