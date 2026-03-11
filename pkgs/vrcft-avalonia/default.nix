@@ -13,7 +13,7 @@ let
   pname = "vrcft-avalonia";
   version = "1.1.1.0";
   src = fetchurl {
-    url = "https://github.com/dfgHiatus/VRCFaceTracking.Avalonia/releases/download/v${version}/VRCFaceTracking.Avalonia.${version}.AppImage";
+    url = "https://github.com/dfgHiatus/VRCFaceTracking.Avalonia/releases/download/v${version}/VRCFaceTracking.Avalonia.${version}.x64.AppImage";
     hash = "sha256-oW8tsrJfC8woL2rCVyItFk4oR8M1SlQ/Y0vA1EaOhGQ=";
   }; # src
   desktopItem = makeDesktopItem {

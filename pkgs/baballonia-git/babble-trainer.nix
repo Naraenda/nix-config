@@ -9,7 +9,7 @@ let
 
   onnxscript = pyPkgs.buildPythonPackage rec {
     pname = "onnxscript";
-    version = "0.5.7";
+    version = "0.6.2";
     format = "wheel";
     src = pkgs.fetchPypi {
       inherit pname version format;
@@ -17,13 +17,21 @@ let
       dist = "py3";
       abi = "none";
       platform = "any";
-      hash = "sha256-+UpmBZxW0TtEkI6bf9na5LT6pmgceE8/1MKc+oY+RU4=";
+      hash = "sha256-IOPD/R2hmzZVVJ1UVaLfcZ20c3T+Qw4B6GWuaRJ8N7k=";
     };
+
+    dependencies = [
+      onnx-ir
+      pyPkgs.numpy
+      pyPkgs.ml-dtypes
+      pyPkgs.onnx
+      pyPkgs.typing-extensions
+    ];
   };
 
   onnx-ir = pyPkgs.buildPythonPackage rec {
     pname = "onnx-ir";
-    version = "0.1.14";
+    version = "0.1.16";
     format = "wheel";
     src = pkgs.fetchPypi {
       inherit version format;
@@ -32,8 +40,15 @@ let
       dist = "py3";
       abi = "none";
       platform = "any";
-      hash = "sha256-ibIS+nhAmBxdtdxHgZDxtzaVNil8PG6uaPscIjfdJVQ=";
+      hash = "sha256-qBgvK6cWZAqv3RDFyXOgLipPfBDtV7awAKO+kOnqbTg=";
     };
+
+    dependencies = [
+      pyPkgs.numpy
+      pyPkgs.ml-dtypes
+      pyPkgs.onnx
+      pyPkgs.typing-extensions
+    ];
   };
 
   babble-trainer-src = pkgs.fetchFromGitHub {

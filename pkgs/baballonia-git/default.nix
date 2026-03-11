@@ -87,9 +87,9 @@ pkgs.buildDotnetModule (finalAttrs: {
     opencvsharp
     udev
     unzip
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
+    libice
+    libsm
+    libx11
   ];
 
   runtimeDeps =

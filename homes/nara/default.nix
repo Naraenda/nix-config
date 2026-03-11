@@ -289,7 +289,7 @@ in
         compatTool = "proton_experimental";
         launchOptions = {
           env = {
-            PRESSURE_VESSEL_FILESYSTEMS_RW = "$XDG_RUNTIME_DIR/monado_comp_ipc";
+            PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES= "1"; 
           }; # env
         }; # launchOptions
       }; # vrchat
