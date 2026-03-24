@@ -66,7 +66,6 @@ in
       matches = [ { application.process.binary = "Discord" } ]
       actions = { update-props = { default_permissions = "rx" } }
     }
-  ]
   '';
 
   home = {
@@ -107,6 +106,7 @@ in
           # Dev
           meld # Diff tool
           remmina
+          rocprof-cv
           # Media
           kew # TUI music player
           spotify
@@ -120,6 +120,7 @@ in
             withEquicord = true;
             enableAutoscroll = true;
           })
+          equibop
           element-desktop
           cinny
           # 3D printing

@@ -39,4 +39,6 @@ in
   #   https://gitlab.com/0x8081/baballonia/-/tree/bsb2e_linux
   baballonia-git = mkPackage ./baballonia-git { };
   baballonia-git-cuda = mkPackage ./baballonia-git { enableCuda = true; };
+
+  rocprof-cv = mkPackage ./rocprof-cv-git { };
 }
