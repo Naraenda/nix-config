@@ -85,7 +85,7 @@ in {
       config
       ;
   };
-
+  nix.settings.trusted-users = [ "root" "nara" ];
 
   # enable the ydotool service
   programs.ydotool = {
