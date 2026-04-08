@@ -16,8 +16,8 @@ with lib;
     nix.distributedBuilds = true;
     nix.buildMachines = [
       {
-        hostName = "fafnir";
-        sshUser = "nixremote";
+        hostName = "fafnir.eax.rip";
+        sshUser = "nara";
 
         systems = [
           "x86_64-linux"
@@ -34,9 +34,6 @@ with lib;
         mandatoryFeatures = [ "big-parallel" ];
       }
     ];
-
-    nix.extraOptions = ''
-      builders-use-substitutes = true
-    '';
+    nix.settings.builders-use-substitutes = true;
   };
 }
