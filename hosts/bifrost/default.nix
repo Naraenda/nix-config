@@ -17,11 +17,6 @@
     lto = "thin";
     processorOpt = "zen4";
     hzTicks = "1000";
-
-    extraMakeFlags = [
-      "NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING=1"
-      "KCFLAGS=-Wno-error"
-    ];
   };
 in {
   imports = [

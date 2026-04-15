@@ -13,52 +13,53 @@ in
     inputs.steam-config-nix.homeModules.default
   ];
 
-  fonts = {
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        emoji = [ "Twitter Color Emoji" ];
-      };
-    };
-  };
-  xdg.configFile."fontconfig/conf.d/99-emoji-fix.conf".text = ''
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-    <fontconfig>
+  fonts.fontconfig.enable = true;
 
-        <match target="pattern">
-            <test qual="any" name="family"><string>emoji</string></test>
-            <edit name="family" mode="assign" binding="same"><string>Noto Color Emoji</string></edit>
-        </match>
+  # fonts = {
+  #   fontconfig = {
+  #     enable = true;
+  #     defaultFonts = {
+  #       emoji = [ "Twitter Color Emoji" ];
+  #     };
+  #   };
+  # };
+  # xdg.configFile."fontconfig/conf.d/99-emoji-fix.conf".text = ''
+  #   <?xml version="1.0" encoding="UTF-8"?>
+  #   <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+  #   <fontconfig>
 
-        <match target="pattern">
-            <test name="family"><string>sans</string></test>
-            <edit name="family" mode="append"><string>Noto Color Emoji</string></edit>
-        </match>
+  #       <match target="pattern">
+  #           <test qual="any" name="family"><string>emoji</string></test>
+  #           <edit name="family" mode="assign" binding="same"><string>Noto Color Emoji</string></edit>
+  #       </match>
 
-        <match target="pattern">
-            <test name="family"><string>sans-serif</string></test>
-            <edit name="family" mode="append"><string>Noto Color Emoji</string></edit>
-        </match>
+  #       <match target="pattern">
+  #           <test name="family"><string>sans</string></test>
+  #           <edit name="family" mode="append"><string>Noto Color Emoji</string></edit>
+  #       </match>
 
-        <selectfont>
-            <rejectfont>
-                <pattern><patelt name="family"><string>DejaVu Sans</string></patelt></pattern>
-            </rejectfont>
-            <rejectfont>
-                <pattern><patelt name="family"><string>DejaVu Serif</string></patelt></pattern>
-            </rejectfont>
-            <rejectfont>
-                <pattern><patelt name="family"><string>DejaVu Sans Mono</string></patelt></pattern>
-            </rejectfont>
-            <rejectfont>
-                <pattern><patelt name="family"><string>Symbola</string></patelt></pattern>
-            </rejectfont>
-        </selectfont>
+  #       <match target="pattern">
+  #           <test name="family"><string>sans-serif</string></test>
+  #           <edit name="family" mode="append"><string>Noto Color Emoji</string></edit>
+  #       </match>
 
-    </fontconfig>
-  '';
+  #       <selectfont>
+  #           <rejectfont>
+  #               <pattern><patelt name="family"><string>DejaVu Sans</string></patelt></pattern>
+  #           </rejectfont>
+  #           <rejectfont>
+  #               <pattern><patelt name="family"><string>DejaVu Serif</string></patelt></pattern>
+  #           </rejectfont>
+  #           <rejectfont>
+  #               <pattern><patelt name="family"><string>DejaVu Sans Mono</string></patelt></pattern>
+  #           </rejectfont>
+  #           <rejectfont>
+  #               <pattern><patelt name="family"><string>Symbola</string></patelt></pattern>
+  #           </rejectfont>
+  #       </selectfont>
 
+  #   </fontconfig>
+  # '';
 
   xdg.configFile."wireplumber/wireplumber.conf.d/50-disable-volume-control.conf".text = ''
   access.rules = [
@@ -103,10 +104,14 @@ in
           alcom # VRChat package manager
           unityhub
           pinta
+          blockbench
+          krita
           # Dev
           meld # Diff tool
           remmina
           rocprof-cv
+          unrar
+          imagemagick
           # Media
           kew # TUI music player
           spotify
@@ -128,6 +133,10 @@ in
           openscad
           # Fonts
           twitter-color-emoji
+          noto-fonts-cjk-sans
+          noto-fonts-cjk-serif
+          corefonts
+          ipafont
         ]
       )) # cfg.modules.games.enable
       # Games
@@ -136,6 +145,7 @@ in
         [
           starsector
           osu-lazer-bin
+          prismlauncher
         ]
       )) # cfg.modules.games.enable
 

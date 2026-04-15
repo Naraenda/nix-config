@@ -60,5 +60,21 @@ with lib;
       vim
       wget
     ];
+
+    fonts.fontDir.enable = true;
+    fonts.enableDefaultPackages = true;
+    fonts.fontconfig.useEmbeddedBitmaps = true;
+    fonts.packages = with pkgs; [
+      dejavu_fonts     
+      twitter-color-emoji
+      noto-fonts
+      noto-fonts-color-emoji
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      corefonts
+      ipafont
+      fira-code
+      fira-code-symbols
+    ];
   };
 }
