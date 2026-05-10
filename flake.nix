@@ -61,9 +61,8 @@
         };
       };
       mkPkgs = system: import nixpkgs ((mkNixpkgs [pkgsOverlay]) // { inherit system; });
-      packages = forAllSystems mkPkgs;
 
-      mkShell = module: forAllSystems (system: import module { pkgs = mkPkgs system; });
+      mkShell = module: system: import module { pkgs = mkPkgs system; };
 
       mkSystem =
         host: config: overrides:
@@ -86,13 +85,15 @@
           configured
           overrides
         ]); # mkSystem
+
+      packages = forAllSystems mkPkgs;
     in
     {
       inherit overlays allOverlays pkgsOverlay packages;
 
-      devShells = {
-        python-venv = mkShell ./shells/python-venv;
-      }; # devShells
+      devShells = forAllSystems (system: {
+        python-venv = mkShell ./shells/python-venv system;
+      }); # devShells
 
       nixosConfigurations = {
         bifrost = mkSystem "bifrost" {

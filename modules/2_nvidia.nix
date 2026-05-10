@@ -29,7 +29,7 @@ with lib;
         # https://lvra.gitlab.io/docs/hardware/
         open = true;
         nvidiaSettings = true;
-        package = config.boot.kernelPackages.nvidiaPackages.stable.overrideAttrs (prev: {
+        package = config.boot.kernelPackages.nvidiaPackages.latest.overrideAttrs (prev: {
           open = prev.passthru.open.overrideAttrs (oldOpen: {
             # Apply patches to the open kernel modules source
             patches = (

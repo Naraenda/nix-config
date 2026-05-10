@@ -145,7 +145,38 @@ in
         [
           starsector
           osu-lazer-bin
-          prismlauncher
+          (prismlauncher.override {
+            additionalLibs = with pkgs; [
+              # Required by MCEF (https://modrinth.com/mod/mcef)
+              glib
+              nss
+              nspr
+              atk
+              at-spi2-atk
+              libdrm
+              expat
+              libxkbcommon
+              libgbm
+              gtk3
+              pango
+              cairo
+              alsa-lib
+              dbus
+              at-spi2-core
+              cups
+              libGL
+              udev
+              systemdLibs
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXcomposite
+              xorg.libXdamage
+              xorg.libXext
+              xorg.libXfixes
+              xorg.libXrandr
+              xorg.libxshmfence
+            ];
+          })
         ]
       )) # cfg.modules.games.enable
 
@@ -241,7 +272,6 @@ in
     extensions = [ "nix" "toml" "rust" "neocmake" ];
     userSettings = {
       base_keymap = "VSCode";
-      disable_ai  = true;
       vim_mode = false;
       autosave = "on_focus_change";
       relative_line_numbers = "enabled";
@@ -300,7 +330,7 @@ in
         compatTool = "proton_experimental";
         launchOptions = {
           env = {
-            PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES= "1"; 
+            PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES= "1";
           }; # env
         }; # launchOptions
       }; # vrchat
