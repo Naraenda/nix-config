@@ -101,7 +101,7 @@ in
           libreoffice
           xwayland-satellite
           # Art
-          blender
+          (inputs.blender-bin.packages.${pkgs.system}.default)
           alcom # VRChat package manager
           unityhub
           pinta
@@ -338,7 +338,7 @@ in
     }; # apps
   }; # programs.steam.config
 
-  xdg.configFile."openvr/openvrpaths.vrpath" = {
+  xdg.configFile."openvr/openvrpaths.vrpath" = lib.mkIf (config.modules.vr.enable) {
     force = true;
     text = ''
       {
@@ -361,7 +361,7 @@ in
     ''; # text
   }; # xdg.configFile."openvr/openvrpaths.vrpath"
 
-  xdg.configFile."openxr/1/active_runtime.json" = {
+  xdg.configFile."openxr/1/active_runtime.json" = lib.mkIf (config.modules.vr.enable) {
     force = true;
     source = "${pkgs.monado-git}/share/openxr/1/openxr_monado.json";
   };

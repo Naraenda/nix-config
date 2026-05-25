@@ -31,6 +31,9 @@
     zed-git = {
       url = "github:zed-industries/zed";
     };
+    blender-bin = {
+      url = "https://flakehub.com/f/edolstra/blender-bin/*";
+    };
     nix-cachyos-kernel = {
       url = "github:xddxdd/nix-cachyos-kernel/release";
     };
@@ -113,20 +116,19 @@
           nix.settings.system-features = [
             "gccarch-znver5"
           ];
-        } {
-          # set overrides
-          # uh oh this crashess?
-        }; # bifrost
-        fafnir = mkSystem "fafnir" {
+        } { }; # bifrost
+        agnarr = mkSystem "agnarr" {
           modules = {
+            # Core
             nvidia = {
               enable = true;
-              cuda = true;
+              cuda = false;
             };
-            containers.enable = true;
-            remote.enable = true;
-          };
-        } { }; # fafnir
+            desktop.enable = true;
+            # Extra
+            games.enable = true;
+          }; # modules
+        } { }; # agnarr
       }; # nixosConfigurations
 
     }; # outputs
