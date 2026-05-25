@@ -99,6 +99,7 @@ in
           obs-studio
           firefox-bin
           libreoffice
+          xwayland-satellite
           # Art
           blender
           alcom # VRChat package manager
@@ -167,14 +168,14 @@ in
               libGL
               udev
               systemdLibs
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXcomposite
-              xorg.libXdamage
-              xorg.libXext
-              xorg.libXfixes
-              xorg.libXrandr
-              xorg.libxshmfence
+              libxcb
+              libx11
+              libxcomposite
+              libxdamage
+              libxext
+              libxfixes
+              libxrandr
+              libxshmfence
             ];
           })
         ]
@@ -255,7 +256,7 @@ in
       ]
     ); # package
 
-    extensions = with pkgs.vscode-extensions; [
+    profiles.default.extensions = with pkgs.vscode-extensions; [
       # dev
       ms-vscode-remote.vscode-remote-extensionpack
       ms-vsliveshare.vsliveshare
