@@ -13,18 +13,29 @@
     nixpkgs-xr = {
       url = "github:nix-community/nixpkgs-xr";
     };
+    # dot-files and user stuff
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     steam-config-nix = {
       url = "github:different-name/steam-config-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # utils
     systems = {
       url = "github:nix-systems/default-linux";
       flake = false;
     };
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
+    };
+    # programs
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
@@ -33,9 +44,6 @@
     };
     blender-bin = {
       url = "https://flakehub.com/f/edolstra/blender-bin/*";
-    };
-    nix-cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel/release";
     };
   }; # inputs
 
