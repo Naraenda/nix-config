@@ -5,6 +5,10 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # TODO: I kinda want to build all VR/XR packages
     # out-of-tree, because bleeding edge is desired.
     #
@@ -124,7 +128,11 @@
           nix.settings.system-features = [
             "gccarch-znver5"
           ];
-        } { }; # bifrost
+        } {
+          modules = with inputs; [
+            nixos-hardware.nixosModules.lenovo-legion-16aph8
+          ];
+        }; # bifrost
         agnarr = mkSystem "agnarr" {
           modules = {
             # Core

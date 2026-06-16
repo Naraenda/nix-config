@@ -35,7 +35,7 @@ with lib;
             patches = (
                 oldOpen.patches or []
               ) ++ (
-                lib.optionals cfg.bsbPatch [ 
+                lib.optionals cfg.bsbPatch [
                   ../patches/nvidia/bsb-dsc/0001-fix-dsc-correct-RC-parameter-tables-to-match-VESA-DS.patch
                   ../patches/nvidia/bsb-dsc/0002-fix-dsc-use-bits_per_component-for-flatnessDetThresh.patch
                   ../patches/nvidia/bsb-dsc/0003-fix-dp-add-Bigscreen-Beyond-VR-headset-to-WAR-databa.patch
