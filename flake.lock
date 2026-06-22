@@ -309,11 +309,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1779505709,
-        "narHash": "sha256-yePAKD3X68ExEk+rZDOEXCH1y0bUSTbtOzPaiZfhT+4=",
+        "lastModified": 1782044196,
+        "narHash": "sha256-QNVrhg+B7MBhQsAAe23bgY0UGB4jeHHPTYTyc+uYzEY=",
         "owner": "nix-community",
         "repo": "nixpkgs-xr",
-        "rev": "8e2ce138c168499500f209a39c618cc4aef45e53",
+        "rev": "cd4946d41e81eb62ca33ff84b77a95ec353b0c3a",
         "type": "github"
       },
       "original": {
@@ -356,11 +356,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1779357205,
-        "narHash": "sha256-cCO8aTqss5x9Ky8GWkpY0Hy5fyTZEbtifSUV8QjSzic=",
+        "lastModified": 1781577229,
+        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f83fc3c307e74bc5fd5adb7eb6b8b13ffd2a36e1",
+        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
         "type": "github"
       },
       "original": {
@@ -580,11 +580,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775636079,
-        "narHash": "sha256-pc20NRoMdiar8oPQceQT47UUZMBTiMdUuWrYu2obUP0=",
+        "lastModified": 1780220602,
+        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
+        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
         "type": "github"
       },
       "original": {
@@ -620,15 +620,16 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1779529148,
-        "narHash": "sha256-WFd4WRqF4VfVDkhBF673hf0k5EGl5H9MGRJsf2pLJY0=",
-        "owner": "zed-industries",
+        "lastModified": 1780683815,
+        "narHash": "sha256-WsX6e94lGDE0r9N+PdS1f4NRuRogG/wIbojFkArFKbI=",
+        "owner": "FlorentinDUBOIS",
         "repo": "zed",
-        "rev": "b0911ccc9e8bb2b9eab4cc53ec2c98b0471e2759",
+        "rev": "0ae94c7b781b77f021aba491f86283ca70ffe3b3",
         "type": "github"
       },
       "original": {
-        "owner": "zed-industries",
+        "owner": "FlorentinDUBOIS",
+        "ref": "fix/terminal-procfs-fd-leak",
         "repo": "zed",
         "type": "github"
       }
