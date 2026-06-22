@@ -44,7 +44,9 @@
       url = "github:nix-community/nixos-vscode-server";
     };
     zed-git = {
-      url = "github:zed-industries/zed";
+      # url = "github:zed-industries/zed";
+      # Fix for copy-paste bug due to FD leak.
+      url = "github:FlorentinDUBOIS/zed/fix/terminal-procfs-fd-leak";
     };
     blender-bin = {
       url = "https://flakehub.com/f/edolstra/blender-bin/*";
@@ -128,11 +130,7 @@
           nix.settings.system-features = [
             "gccarch-znver5"
           ];
-        } {
-          modules = with inputs; [
-            nixos-hardware.nixosModules.lenovo-legion-16aph8
-          ];
-        }; # bifrost
+        } { }; # bifrost
         agnarr = mkSystem "agnarr" {
           modules = {
             # Core
@@ -144,7 +142,12 @@
             # Extra
             games.enable = true;
           }; # modules
-        } { }; # agnarr
+        } {
+          # TODO:
+          # modules = with inputs; [
+          #   nixos-hardware.nixosModules.lenovo-legion-16aph8
+          # ];
+        }; # agnarr
       }; # nixosConfigurations
 
     }; # outputs
