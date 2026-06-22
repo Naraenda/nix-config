@@ -34,7 +34,7 @@ with lib;
     # OpenXR runtime.
     services.monado = {
       enable = true;
-      package = pkgs.monado-git;
+      package = pkgs.monado;
       defaultRuntime = true; # Register as default OpenXR runtime.
       forceDefaultRuntime = true; # Register as default OpenXR runtime.
       highPriority = true;
@@ -58,6 +58,12 @@ with lib;
       U_PACING_COMP_MIN_FRAME_PERIOD = "1";
       U_PACING_APP_IMMEDIATE_WAIT_FRAME_RETURN = "0";
     };
+
+    # Babble facetracker firmware updating
+    services.udev.packages = [
+      pkgs.platformio-core
+      pkgs.openocd
+    ];
 
     # Bigscreen Beyond & Vive Face tracker.
     services.udev.extraRules = ''
