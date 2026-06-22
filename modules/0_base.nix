@@ -61,13 +61,22 @@ with lib;
       tmux
       vim
       wget
+      # Nix-tooling
+      nixd # LSP
+      nil # LSP
+      statix # linter
+      alejandra # formatter
+      deadnix # deadcode finder
+      nixfmt-rfc-style # formatter
+      nom # output monitor
+      nix-index # package lookup
     ];
 
     fonts.fontDir.enable = true;
     fonts.enableDefaultPackages = true;
     fonts.fontconfig.useEmbeddedBitmaps = true;
     fonts.packages = with pkgs; [
-      dejavu_fonts     
+      dejavu_fonts
       twitter-color-emoji
       noto-fonts
       noto-fonts-color-emoji
