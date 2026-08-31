@@ -33,6 +33,7 @@ in
         rsync
         less
         ffmpeg
+        bubblewrap
         # System debugging
         usbutils
         pciutils
@@ -88,11 +89,6 @@ in
           prusa-slicer
           openscad
           # Fonts
-          twitter-color-emoji
-          noto-fonts-cjk-sans
-          noto-fonts-cjk-serif
-          corefonts
-          ipafont
         ]
       )) # cfg.modules.games.enable
       # Games
@@ -101,6 +97,7 @@ in
         [
           starsector
           osu-lazer-bin
+          openttd-jgrpp
           (prismlauncher.override {
             additionalLibs = with pkgs; [
               # Required by MCEF (https://modrinth.com/mod/mcef)
@@ -133,6 +130,9 @@ in
               libxshmfence
             ];
           })
+          # from: https://github.com/Naraenda/konaste-flake
+          konaste
+          sdvx
         ]
       )) # cfg.modules.games.enable
 
@@ -233,6 +233,7 @@ in
 
   programs.zed-editor = {
     enable = true;
+    package = inputs.zed-git.packages.${pkgs.system}.default;
     extensions = [ "nix" "toml" "rust" "neocmake" ];
     userSettings = {
       base_keymap = "VSCode";
@@ -269,6 +270,9 @@ in
         metrics = false;
       };
     }; # userSettings
+    # extraPackages = with pkgs; [
+    #   nil
+    # ];
   };
 
   programs.steam.config = {
@@ -291,7 +295,6 @@ in
         # * rtsp19 is broken. Do not use!
         # compatTool = "GE-Proton10-15-rtsp18-1";
 
-        compatTool = "proton_experimental";
         launchOptions = {
           env = {
             PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES= "1";
@@ -317,7 +320,7 @@ in
         ],
         "runtime" :
         [
-          "${pkgs.xrizer-git}/lib/xrizer"
+          "${pkgs.xrizer}/lib/xrizer"
         ],
         "version" : 1
       }
@@ -326,6 +329,6 @@ in
 
   xdg.configFile."openxr/1/active_runtime.json" = lib.mkIf (config.modules.vr.enable) {
     force = true;
-    source = "${pkgs.monado-git}/share/openxr/1/openxr_monado.json";
+    source = "${pkgs.monado}/share/openxr/1/openxr_monado.json";
   };
 }

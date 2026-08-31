@@ -21,5 +21,9 @@ with lib;
       enable = true;
       remotePlay.openFirewall = true;
     };
+    services.udev.extraRules = ''
+        # YuanCon Controller Mapping
+        KERNEL=="hidraw*", ATTRS{idVendor}=="1ccf", ATTRS{idProduct}=="101c", MODE="0666", TAG+="uaccess"
+      '';
   };
 }

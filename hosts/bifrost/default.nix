@@ -13,7 +13,7 @@
     ];
 
     # Optimization settings
-    cpusched = "bore";
+    cpusched = "eevdf";
     lto = "thin";
     processorOpt = "zen4";
     hzTicks = "1000";
@@ -80,7 +80,10 @@ in {
       config
       ;
   };
-  nix.settings.trusted-users = [ "root" "nara" ];
+  nix.settings.trusted-users = [
+    "root"
+    "nara"
+  ];
 
   # enable the ydotool service
   programs.ydotool = {

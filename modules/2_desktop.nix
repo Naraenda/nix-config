@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 let
@@ -30,5 +31,11 @@ with lib;
     }; # services.desktopManager
 
     programs.xwayland.enable = true;
+
+    fonts.packages = with pkgs; [ 
+      twitter-color-emoji
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+    ];
   };
 }

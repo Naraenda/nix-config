@@ -17,6 +17,14 @@
     nixpkgs-xr = {
       url = "github:nix-community/nixpkgs-xr";
     };
+    nix-vrft = {
+      url = "github:Naraenda/nix-vrft";
+      # url = "git+file:/home/nara/code/nix-vrft";
+    };
+    konaste-flake = {
+      url = "github:Naraenda/konaste-flake";
+      # url = "git+file:/home/nara/code/konaste-flake";
+    };
     # dot-files and user stuff
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -44,9 +52,9 @@
       url = "github:nix-community/nixos-vscode-server";
     };
     zed-git = {
-      # url = "github:zed-industries/zed";
+      url = "github:zed-industries/zed";
       # Fix for copy-paste bug due to FD leak.
-      url = "github:FlorentinDUBOIS/zed/fix/terminal-procfs-fd-leak";
+      # url = "github:FlorentinDUBOIS/zed/fix/terminal-procfs-fd-leak";
     };
     blender-bin = {
       url = "https://flakehub.com/f/edolstra/blender-bin/*";
@@ -68,6 +76,7 @@
       allOverlays = overlays ++ [
         pkgsOverlay
         inputs.nix-cachyos-kernel.overlays.default
+        inputs.konaste-flake.overlays.default
       ];
 
       mkNixpkgs = overlays: {
@@ -90,6 +99,7 @@
           configured = {
             modules = [
               { nixpkgs = mkNixpkgs allOverlays; }
+              inputs.nix-vrft.nixosModules.pinned
               ./modules
               ./hosts/${host}
               config
